@@ -1,3 +1,5 @@
+
+/* background */
 body {
     width: 100%;
     height: 100%;
@@ -20,40 +22,4 @@ body {
       );
     background-size: var(--s) calc(var(--s) * 0.577);
          }
-  
-.top-panel {
-    background-color: #333;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-.nav-menu ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    justify-content: flex-start;
-}
-
-.nav-menu li {
-    padding: 15px 20px;
-}
-
-.nav-menu a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-}
-
-.nav-menu a:hover {
-    color: #D2691E;
-}
-
-/* Добавим отступ для основного контента, чтобы он не прятался под панелью */
-.container {
-    margin-top: 60px;
-}
   

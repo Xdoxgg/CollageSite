@@ -9,7 +9,7 @@
     .top-panel {
         background: #D2691E;
         height: 200px;
-        width: 100%;
+        width: 100% + 50px;
     }
     .nav-menu a {
         color: #000000; /* Добавляем цвет для ссылок */
@@ -18,7 +18,7 @@
         font-size: 38px;
     }
     .nav-menu a:hover {
-        transition: 0.6;
+        transition: 2;
         color: #C0C0C0; /* Цвет текста при наведении */
         
     }
@@ -30,15 +30,17 @@
 <body>
     <header class="top-panel">
         <nav class="nav-menu">
-            <ul>
-                <li><a href="#">Главная</a></li>
-                <li><a href="#">О нас</a></li>
-                <li><a href="#">Контакты</a></li>
+            <ul style="display: flex; justify-content: center; gap: 50px; padding: 0; margin: 0;">
+                <li style="list-style: none;"> <a href="#" style="padding-top: 50px; display: inline-block;">Главная</a></li>
+                <li style="list-style: none;"> <a href="#" style="padding-top: 50px; display: inline-block;">О нас</a></li>
+                <li style="list-style: none;"> <a href="#" style="padding-top: 50px; display: inline-block;">Контакты</a></li>
             </ul>
         </nav>
     </header>
-    <div class="container">
-       
-    </div>
+    
+
+    
+
+
 </body>
 </html> 
