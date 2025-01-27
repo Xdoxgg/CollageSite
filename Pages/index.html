@@ -4,36 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Моя страница</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f0f0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-        p {
-            line-height: 1.6;
-            color: #666;
-        }
-    </style>
+<link rel="stylesheet" href="../Styles/main.css">
+<style>
+    .top-panel {
+        background: #D2691E;
+        height: 200px;
+        width: 100%;
+    }
+    .nav-menu a {
+        color: #000000; /* Добавляем цвет для ссылок */
+        text-decoration: none; /* Убираем подчеркивание у ссылок */
+        text-decoration-thickness: 3px;
+        font-size: 38px;
+    }
+    .nav-menu a:hover {
+        transition: 0.6;
+        color: #C0C0C0; /* Цвет текста при наведении */
+        
+    }
+
+</style>
+
+
 </head>
 <body>
+    <header class="top-panel">
+        <nav class="nav-menu">
+            <ul>
+                <li><a href="#">Главная</a></li>
+                <li><a href="#">О нас</a></li>
+                <li><a href="#">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
     <div class="container">
-        <h1>Добро пожаловать на мою страницу</h1>
-        <p>Это простая HTML страница с базовой стилизацией CSS.</p>
-        <p>Вы можете изменить этот текст и стили по своему усмотрению.</p>
+       
     </div>
 </body>
 </html> 
