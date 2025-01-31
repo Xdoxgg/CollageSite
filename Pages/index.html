@@ -8,8 +8,8 @@
 <style>
     .top-panel {
         background: #D2691E;
-        height: 200px;
-        width: 100% + 50px;
+        height: 100px;
+        width: 100%;
     }
     .nav-menu a {
         color: #000000; /* Добавляем цвет для ссылок */
@@ -22,7 +22,44 @@
         color: #C0C0C0; /* Цвет текста при наведении */
         
     }
-/* data */
+    .submenu {
+        position: absolute;
+        top: 100%;
+        left: -50%;          /* Сдвигаем немного влево для лучшего выравнивания */
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+        background: #D2691E;
+        padding: 10px;
+        border-radius: 5px;
+        width: 300px;
+        z-index: 1000;
+    }
+    
+    .submenu div {
+        margin: 10px 0;
+        text-align: center;    /* Центрируем текст в подменю */
+    }
+    
+    .submenu a {
+        font-size: 24px;
+    }
+    .nav-menu div:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        right: -100px;
+        top: 0px;
+        height: 100px;
+        width: 2px;
+        background-color: #000000;
+    }
+    
+    .submenu div {
+        margin: 10px 0;
+        text-align: center;
+    }
+
 </style>
 
 
@@ -30,16 +67,58 @@
 <body>
     <header class="top-panel">
         <nav class="nav-menu">
-            <ul style="display: flex; justify-content: center; gap: 50px; padding: 0; margin: 0;">
-                <li style="list-style: none;"> <a href="#" style="padding-top: 50px; display: inline-block;">Главная</a></li>
-                <li style="list-style: none;"> <a href="#" style="padding-top: 50px; display: inline-block;">О нас</a></li>
-                <li style="list-style: none;"> <a href="#" style="padding-top: 50px; display: inline-block;">Контакты</a></li>
-            </ul>
+            <div style="display: flex; justify-content: center; gap: 200px; padding: 0; margin: 0;">
+                <div style="position: relative;"> 
+                    <a href="#" style="padding-top: 20px; display: inline-block;">Главная</a>
+                    <div class="submenu">
+                        <div><a href="#">Новости</a></div>
+                        <div><a href="#">Акции</a></div>
+                        <div><a href="#">Блог</a></div>
+                    </div>
+                </div>
+                <div style="position: relative;"> 
+                    <a href="#" style="padding-top: 20px; display: inline-block;">О нас</a>
+                    <div class="submenu">
+                        <div><a href="#">История</a></div>
+                        <div><a href="#">Команда</a></div>
+                        <div><a href="#">Достижения</a></div>
+                    </div>
+                </div>
+                <div style="position: relative;"> 
+                    <a href="#" style="padding-top: 20px; display: inline-block;">Контакты</a>
+                    <div class="submenu">
+                        <div><a href="#">Адрес</a></div>
+                        <div><a href="#">Телефон</a></div>
+                        <div><a href="#">Email</a></div>
+                    </div>
+                </div>
+            </div>
         </nav>
     </header>
     
 <div class="content"></div>
     
+<script>
+    document.querySelectorAll('.nav-menu > div > div').forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            const submenu = this.querySelector('.submenu');
+            if (submenu) {
+                submenu.style.visibility = 'visible';
+                submenu.style.opacity = '1';
+                submenu.style.transform = 'translateY(0)';
+            }
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            const submenu = this.querySelector('.submenu');
+            if (submenu) {
+                submenu.style.visibility = 'hidden';
+                submenu.style.opacity = '0';
+                submenu.style.transform = 'translateY(-20px)';
+            }
+        });
+    });
+</script>
 
 
 </body>
