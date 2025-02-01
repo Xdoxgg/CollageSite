@@ -8,117 +8,130 @@
 <style>
     .top-panel {
         background: #D2691E;
-        height: 100px;
-        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 0 8%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+
     }
     .nav-menu a {
+        color: #000000; 
+        text-decoration: none; 
+        text-decoration-thickness: 3px;
+        font-size: 38px;
+        display: block;
+        padding: 15px;
+    }
+    .nav-menu a:hover {
+        transition: 2;
+        color: #C0C0C0; 
+    }
+
+    .nav-menu ul {
+        list-style: none;
+    }
+
+    .nav-menu li{
+        position: relative;
+        float: left;
+    }
+
+
+    .nav-menu li:hover > .submenu{
+        display: initial;
+    }
+
+
+
+
+    .submenu {
+        position: absolute;
+        left: 0;
+        width: 95%;
+        background: #D2691E;
+        display: none;
+
+    }
+    .submenu li{
+        float: left;
+        width: 100%;
+        background: #D2691E;
+       
+        
+    }
+    .submenu a {
         color: #000000; /* Добавляем цвет для ссылок */
         text-decoration: none; /* Убираем подчеркивание у ссылок */
         text-decoration-thickness: 3px;
         font-size: 38px;
-    }
-    .nav-menu a:hover {
-        transition: 2;
-        color: #C0C0C0; /* Цвет текста при наведении */
-        
-    }
-    .submenu {
-        position: absolute;
-        top: 100%;
-        left: -50%;          /* Сдвигаем немного влево для лучшего выравнивания */
-        visibility: hidden;
-        opacity: 0;
-        transform: translateY(-20px);
-        transition: all 0.3s ease;
-        background: #D2691E;
-        padding: 10px;
-        border-radius: 5px;
-        width: 300px;
-        z-index: 1000;
-    }
-    
-    .submenu div {
-        margin: 10px 0;
-        text-align: center;    /* Центрируем текст в подменю */
-    }
-    
-    .submenu a {
-        font-size: 24px;
-    }
-    .nav-menu div:not(:last-child)::after {
-        content: '';
-        position: absolute;
-        right: -100px;
-        top: 0px;
-        height: 100px;
-        width: 2px;
-        background-color: #000000;
-    }
-    
-    .submenu div {
-        margin: 10px 0;
-        text-align: center;
+        display: block;
+        padding: 0%;
+
     }
 
+
 </style>
+
+
 
 
 </head>
 <body>
     <header class="top-panel">
         <nav class="nav-menu">
-            <div style="display: flex; justify-content: center; gap: 200px; padding: 0; margin: 0;">
-                <div style="position: relative;"> 
-                    <a href="#" style="padding-top: 20px; display: inline-block;">Главная</a>
-                    <div class="submenu">
-                        <div><a href="#">Новости</a></div>
-                        <div><a href="#">Акции</a></div>
-                        <div><a href="#">Блог</a></div>
-                    </div>
-                </div>
-                <div style="position: relative;"> 
-                    <a href="#" style="padding-top: 20px; display: inline-block;">О нас</a>
-                    <div class="submenu">
-                        <div><a href="#">История</a></div>
-                        <div><a href="#">Команда</a></div>
-                        <div><a href="#">Достижения</a></div>
-                    </div>
-                </div>
-                <div style="position: relative;"> 
-                    <a href="#" style="padding-top: 20px; display: inline-block;">Контакты</a>
-                    <div class="submenu">
-                        <div><a href="#">Адрес</a></div>
-                        <div><a href="#">Телефон</a></div>
-                        <div><a href="#">Email</a></div>
-                    </div>
-                </div>
-            </div>
+            <ul >
+                <li><a href="#">Главная</a></li>
+                <li><a href="#">Новости</a></li>
+                <li><a href="#">Абитуриентам</a>
+                <ul class="submenu">
+                    <li><a href="#">Расписание</a></li>
+                    <li><a href="#">Карта</a></li>
+                    <li><a href="#">Оценки</a></li>
+                </ul></li>
+                <li> <a href="#">Учащимся</a>
+                    <ul class="submenu">
+                        <li><a href="#">Расписание</a></li>
+                        <li><a href="#">Карта</a></li>
+                        <li><a href="#">Оценки</a></li>
+                    </ul>
+
+                </li>
+                <li><a href="#">Контакты</a></li>
+            </ul>
         </nav>
+        <div class="user-card">
+            <div class="user-card-group" id="userCardGroup"></div>  
+            <div class="user-card-name" id="userCardName"></div>
+        </div>
     </header>
+
+
     
 <div class="content"></div>
     
 <script>
-    document.querySelectorAll('.nav-menu > div > div').forEach(item => {
-        item.addEventListener('mouseenter', function() {
-            const submenu = this.querySelector('.submenu');
-            if (submenu) {
-                submenu.style.visibility = 'visible';
-                submenu.style.opacity = '1';
-                submenu.style.transform = 'translateY(0)';
-            }
-        });
+    function setUserCardGroup(text) {
+        document.getElementById('userCardGroup').textContent = text;
+    }
+
+    function setUserCardName(text) {
+        document.getElementById('userCardName').textContent = text;
         
-        item.addEventListener('mouseleave', function() {
-            const submenu = this.querySelector('.submenu');
-            if (submenu) {
-                submenu.style.visibility = 'hidden';
-                submenu.style.opacity = '0';
-                submenu.style.transform = 'translateY(-20px)';
-            }
-        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        setUserCardGroup('T-294');
+        setUserCardName('Жук Михаил Дмитриевич');
     });
 </script>
+
+
 
 
 </body>
