@@ -1,0 +1,101 @@
+
+
+.top-panel {
+    background: #6E473B;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    padding: 0 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+.nav-menu a {
+    color: #BEB5A9; 
+    text-decoration: none; 
+    text-decoration-thickness: 3px;
+    font-size: 38px;
+    display: block;
+    padding: 15px;
+}
+
+.nav-menu a:hover{
+    color: #E1D4C2;
+}
+
+
+.nav-menu ul {
+    margin-top: 20px;
+    list-style: none;
+}
+
+
+.nav-menu li{
+    position: relative;
+    float: left;
+}
+.nav-menu li:hover {
+    transition: 2;
+    color: #C0C0C0; 
+}
+
+.nav-menu li:hover > .submenu{
+    display: initial;
+}
+
+
+
+
+.submenu {
+    border-radius: 10px;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    background: #6E473B;
+    display: none;
+    overflow: hidden; 
+    z-index: 1000;
+}
+
+
+.submenu li{
+    float: left;
+    width: 100%;
+    background: #6E473B;
+}
+
+
+.submenu a {
+    color: #BEB5A9; 
+    text-decoration: none; 
+    text-decoration-thickness: 3px;
+    font-size: 38px;
+    display: block;
+    padding: 0%;
+}
+
+.submenu a:hover{
+    color:white;
+}
+
+.nav-menu li:hover > .submenu {
+    display: initial;
+    top: 70%;
+}
+
+
+.arrow {
+    transform: rotate(90deg);
+    display: inline-block;
+    margin-left: 5px;
+    font-size: 25px;
+    transition: transform 0.35s ease;
+}
+
+.nav-menu > ul > li:hover .arrow {
+    transform: rotate(0deg);
+}

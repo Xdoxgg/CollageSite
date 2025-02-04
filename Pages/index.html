@@ -5,80 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Моя страница</title>
 <link rel="stylesheet" href="../Styles/main.css">
-<style>
-    .top-panel {
-        background: #D2691E;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        padding: 0 8%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-
-    }
-    .nav-menu a {
-        color: #000000; 
-        text-decoration: none; 
-        text-decoration-thickness: 3px;
-        font-size: 38px;
-        display: block;
-        padding: 15px;
-    }
-    .nav-menu a:hover {
-        transition: 2;
-        color: #C0C0C0; 
-    }
-
-    .nav-menu ul {
-        list-style: none;
-    }
-
-    .nav-menu li{
-        position: relative;
-        float: left;
-    }
-
-
-    .nav-menu li:hover > .submenu{
-        display: initial;
-    }
-
-
-
-
-    .submenu {
-        position: absolute;
-        left: 0;
-        width: 95%;
-        background: #D2691E;
-        display: none;
-
-    }
-    .submenu li{
-        float: left;
-        width: 100%;
-        background: #D2691E;
-       
-        
-    }
-    .submenu a {
-        color: #000000; /* Добавляем цвет для ссылок */
-        text-decoration: none; /* Убираем подчеркивание у ссылок */
-        text-decoration-thickness: 3px;
-        font-size: 38px;
-        display: block;
-        padding: 0%;
-
-    }
-
-
-</style>
-
-
-
+<link rel="stylesheet" href="../Styles/index.css">
 
 </head>
 <body>
@@ -87,13 +14,14 @@
             <ul >
                 <li><a href="#">Главная</a></li>
                 <li><a href="#">Новости</a></li>
-                <li><a href="#">Абитуриентам</a>
+                <li><a href="#">Абитуриентам<span class="arrow">▼</span></a>
                 <ul class="submenu">
                     <li><a href="#">Расписание</a></li>
                     <li><a href="#">Карта</a></li>
+
                     <li><a href="#">Оценки</a></li>
                 </ul></li>
-                <li> <a href="#">Учащимся</a>
+                <li> <a href="#">Учащимся<span class="arrow">▼</span></a>
                     <ul class="submenu">
                         <li><a href="#">Расписание</a></li>
                         <li><a href="#">Карта</a></li>
@@ -106,7 +34,7 @@
         </nav>
         <div class="user-card">
             <div class="user-card-group" id="userCardGroup"></div>  
-            <div class="user-card-name" id="userCardName"></div>
+            <div class="user-card-name" ><div class="user-card-name-text" id="userCardName"></div></div>
         </div>
     </header>
 
