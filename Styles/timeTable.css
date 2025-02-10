@@ -1,28 +1,42 @@
 table {
-    display: table;
-    border-collapse: collapse; /* Объединяет границы ячеек */
-    width: 100%; /* Ширина таблицы */
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: #fff;
+    background-color: #333;
 }
 
-
-
-
-th, td {
-    border: 1px solid black; /* Граница для ячеек */
-    padding: 8px; /* Отступ внутри ячеек */
-    text-align: left; /* Выравнивание текста */
-    color: #E1D4C2;
-}
-
-th {
-    background-color: white; /* Цвет фона для заголовков */
-
-}
-
-body {
-    background: #6E473B;
+body{
+    background: #808080;
 }
 
 caption {
-    color: #BEB5A9;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 10px;
 }
+
+th, td {
+    border: 1px solid #555;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #444;
+    color: #ffcc00;
+}
+
+tr:nth-child(even) {
+    background-color: #444;
+}
+
+
+/* Выделение только ячейки при наведении */
+td:hover {
+    background-color: #555;
+    color: #ffcc00;
+}
+

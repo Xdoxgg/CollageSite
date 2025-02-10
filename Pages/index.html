@@ -5,8 +5,153 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Моя страница</title>
 
-    <link rel="stylesheet" href="/Styles/main.css">
-    <link rel="stylesheet" href="/Styles/index.css">
+<style>
+    /* background */
+    body {
+      width: 99%;
+      height: 100%;
+      --s: 200px; /* control the size */
+      --c1: #1d1d1d;
+      --c2: #4e4f51;
+      --c3: #3c3c3c;
+      
+      background: repeating-conic-gradient(
+            from 30deg,
+            #0000 0 120deg,
+            var(--c3) 0 180deg
+          )
+          calc(0.5 * var(--s)) calc(0.5 * var(--s) * 0.577),
+        repeating-conic-gradient(
+          from 30deg,
+          var(--c1) 0 60deg,
+          var(--c2) 0 120deg,
+          var(--c3) 0 180deg
+      );
+        background-size: var(--s) calc(var(--s) * 0.577);
+    }
+      
+    .user-card{
+      margin: 10px;
+      width: 300px;
+      height: 100px;
+      background: #A78D78;
+      border-radius: 10px;
+    }
+    .user-card-group{
+      position: relative;
+      float: right;
+      width: 40%;
+      top: 10%;
+      height: 80%;
+      margin-top: 1px;
+      margin-right: 10px;
+     
+      background: #E1D4C2;
+      border-radius: 10px;
+      /* Text */
+      color: #000000;
+      position: center;
+      font-size: 30px;
+      font-weight: normal;
+      text-align: center;
+      line-height: 100px;
+    }
+    .user-card-name{
+      background: #E1D4C2;
+      border-radius: 5px;
+      float: left ;
+      width: 50%;
+      height: 50%;
+      margin: 10px;
+      margin-top: 40px;
+      
+    }
+    .user-card-name-text{
+      margin-top: 10px;
+      font-weight: normal;
+      text-align: center;
+      
+    }
+    .top-panel {
+        background: #6E473B;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 120px;
+        padding: 0 8%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 10;
+    }
+    .nav-menu a {
+        color: #BEB5A9; 
+        text-decoration: none; 
+        text-decoration-thickness: 3px;
+        font-size: 38px;
+        display: block;
+        padding: 15px;
+    }
+    .nav-menu a:hover{
+        color: #E1D4C2;
+    }
+    .nav-menu ul {
+        margin-top: 20px;
+        list-style: none;
+    }
+    .nav-menu li{
+        position: relative;
+        float: left;
+    }
+    .nav-menu li:hover {
+        transition: 2;
+        color: #C0C0C0; 
+    }
+    .nav-menu li:hover > .submenu{
+        display: initial;
+    }
+    .submenu {
+        border-radius: 10px;
+        position: absolute;
+        left: 0;
+        width: 100%;
+        background: #6E473B;
+        display: none;
+        overflow: hidden; 
+        z-index: 1000;
+    }
+    .submenu li{
+        float: left;
+        width: 100%;
+        background: #6E473B;
+    }
+    .submenu a {
+        color: #BEB5A9; 
+        text-decoration: none; 
+        text-decoration-thickness: 3px;
+        font-size: 38px;
+        display: block;
+        padding: 0%;
+    }
+    .submenu a:hover{
+        color:white;
+    }
+    .nav-menu li:hover > .submenu {
+        display: initial;
+        top: 70%;
+    }
+    .arrow {
+        transform: rotate(90deg);
+        display: inline-block;
+        margin-left: 5px;
+        font-size: 25px;
+        transition: transform 0.35s ease;
+    }
+    .nav-menu > ul > li:hover .arrow {
+        transform: rotate(0deg);
+    }
+    </style>
 </head>
 <body>
     <header class="top-panel">
@@ -24,7 +169,7 @@
                 <li> <a href="#">Учащимся<span class="arrow">▼</span></a>
                     <ul class="submenu">
                         <li><a href="../Pages/timeTable.html">Расписание</a></li>
-                        <li><a href="#">Карта</a></li>
+                        <li><a href="../Pages/map.html">Карта</a></li>
                         <li><a href="#">Оценки</a></li>
                     </ul>
 
@@ -46,6 +191,9 @@
 </div>
     
 <script>
+
+   
+
     function setUserCardGroup(text) {
         document.getElementById('userCardGroup').textContent = text;
     }
