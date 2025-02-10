@@ -1,6 +1,26 @@
-table{
+table {
     display: table;
-    
+    border-collapse: collapse; /* Объединяет границы ячеек */
+    width: 100%; /* Ширина таблицы */
+}
+
+
+
+
+th, td {
+    border: 1px solid black; /* Граница для ячеек */
+    padding: 8px; /* Отступ внутри ячеек */
+    text-align: left; /* Выравнивание текста */
+    color: #E1D4C2;
+}
+
+th {
+    background-color: white; /* Цвет фона для заголовков */
+
+}
+
+body {
+    background: #6E473B;
 }
 
 caption {
