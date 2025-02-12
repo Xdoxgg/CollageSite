@@ -28,7 +28,7 @@ func handleRequest() {
 	http.Handle("/Styles/", http.StripPrefix("/Styles/", http.FileServer(http.Dir("./Styles/"))))
 	http.Handle("/Pages/", http.StripPrefix("/Pages/", http.FileServer(http.Dir("./Pages/"))))
 	http.HandleFunc("/", index)
-	http.HandleFunc("/timeTable", timeTable)
+	//http.HandleFunc("/timeTable", timeTable)
 	http.ListenAndServe(":8080", nil)
 }
 
