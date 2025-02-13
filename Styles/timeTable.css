@@ -34,7 +34,7 @@ tr:nth-child(even) {
 }
 
 
-/* Выделение только ячейки при наведении */
+
 td:hover {
     background-color: #555;
     color: #ffcc00;

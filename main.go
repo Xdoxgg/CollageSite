@@ -5,14 +5,14 @@ import (
 	"net/http"
 )
 
-func timeTable(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("Pages/timeTable.html")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	tmpl.Execute(w, nil)
-}
+// func timeTable(w http.ResponseWriter, r *http.Request) {
+// 	tmpl, err := template.ParseFiles("Pages/timeTable.html")
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
+// 	tmpl.Execute(w, nil)
+// }
 
 func index(w http.ResponseWriter, r *http.Request) {
 
