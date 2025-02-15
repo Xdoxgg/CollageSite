@@ -40,3 +40,36 @@ td:hover {
     color: #ffcc00;
 }
 
+.autocomplete-container {
+    position: relative;
+    width: 300px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+
+  /* Стили для выпадающего списка */
+  .autocomplete-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    max-height: 150px;
+    overflow-y: auto;
+    display: none; /* Скрываем список по умолчанию */
+  }
+
+  .autocomplete-item {
+    padding: 8px;
+    cursor: pointer;
+  }
+
+  .autocomplete-item:hover {
+    background-color: #f0f0f0;
+  }

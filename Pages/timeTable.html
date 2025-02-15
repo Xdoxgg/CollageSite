@@ -12,7 +12,15 @@
 
 <body>
 <table>
-    <caption>Расписание уроков</caption>
+    <caption>
+        <h1>Расписание</h1>
+        <div class="autocomplete-container">
+            <input type="text" id="autocomplete-input" placeholder="Введите текст...">
+            <div id="autocomplete-list" class="autocomplete-list"></div>
+          </div>
+
+    </caption>
+  
     <thead>
     <tr>
         <th id="header-lesson">Урок</th>
@@ -173,4 +181,52 @@
 </table>
 
 </body>
+
+
+<script>
+
+// const suggestions = ["Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Honeydew"];
+
+const input = document.getElementById("autocomplete-input");
+const list = document.getElementById("autocomplete-list");
+
+const groups =[]
+
+// Функция для фильтрации и отображения вариантов
+input.addEventListener("input", () => {
+  const query = input.value.toLowerCase();
+  list.innerHTML = ""; // Очищаем список
+
+  if (query) {
+    const filteredSuggestions = suggestions.filter(item => item.toLowerCase().includes(query));
+    filteredSuggestions.forEach(item => {
+      const listItem = document.createElement("div");
+      listItem.textContent = item;
+      listItem.classList.add("autocomplete-item");
+
+      // Добавляем обработчик клика для выбора элемента
+      listItem.addEventListener("click", () => {
+        input.value = item; // Устанавливаем выбранное значение в текстовое поле
+        list.innerHTML = ""; // Очищаем список
+        list.style.display = "none"; // Скрываем список
+      });
+
+      list.appendChild(listItem);
+    });
+
+    list.style.display = "block"; // Показываем список
+  } else {
+    list.style.display = "none"; // Скрываем список, если поле пустое
+  }
+});
+
+// Скрываем список, если пользователь кликает вне его
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".autocomplete-container")) {
+    list.style.display = "none";
+  }
+});
+
+</script>
+
 </html> 
