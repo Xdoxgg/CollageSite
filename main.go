@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-
+	"encoding/json"
 	_ "github.com/lib/pq" // Используем "_" для импорта драйвера pq
 )
 
@@ -51,18 +51,37 @@ func index(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, nil)
 }
 
+func getGroupsHandler(w http.ResponseWriter, r *http.Request) {
+	db, err := connectDB()
+	if err != nil {
+		http.Error(w, "Ошибка подключения к базе данных", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+
+	groups, err := getStudents(db) // Получаем данные групп из базы
+	if err != nil {
+		http.Error(w, "Ошибка получения данных групп", http.StatusInternalServerError)
+		return
+	}
+
+	// Преобразуем данные в JSON и отправляем клиенту
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(groups)
+}
+
 func handleRequest() {
 	http.Handle("/Styles/", http.StripPrefix("/Styles/", http.FileServer(http.Dir("./Styles/"))))
 	http.Handle("/Pages/", http.StripPrefix("/Pages/", http.FileServer(http.Dir("./Pages/"))))
 	http.HandleFunc("/", index)
-
+	http.HandleFunc("/api/groups", getGroupsHandler) // Новый API-эндпоинт
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		fmt.Println("Ошибка запуска сервера:", err)
 	}
 }
 
-func GetStudents(db *sql.DB) ([]Group, error) {
+func getStudents(db *sql.DB) ([]Group, error) {
 	rows, err := db.Query(`SELECT id, group_name FROM groups`)
 	if err != nil {
 		return nil, err
