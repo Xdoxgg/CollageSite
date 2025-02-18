@@ -185,7 +185,9 @@
 
 <script>
 
-// const suggestions = ["Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Honeydew"];
+
+const suggestions = JSON.parse('{{.}}'); 
+
 
 const input = document.getElementById("autocomplete-input");
 const list = document.getElementById("autocomplete-list");
@@ -226,19 +228,6 @@ document.addEventListener("click", (event) => {
     list.style.display = "none";
   }
 });
-
-
-fetch('http://localhost:8080/data')
-            .then(response => response.json())
-            .then(data => {
-                const productList = document.getElementById('product-list');
-                data.forEach(product => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `${product.name} - $${product.price}`;
-                    productList.appendChild(listItem);
-                });
-            })
-            .catch(error => console.error('Ошибка при загрузке данных:', error));
 
 </script>
 
