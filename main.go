@@ -75,6 +75,8 @@ func handleRequest() {
 	http.Handle("/Pages/", http.StripPrefix("/Pages/", http.FileServer(http.Dir("./Pages/"))))
 	http.HandleFunc("/", index)
 	http.HandleFunc("/api/groups", getGroupsHandler) // Новый API-эндпоинт
+	http.HandleFunc("/api/group_by_name", getGroupByNameHandler)
+	// http.HandleFunc("/api/group", getGroupByIDHandler)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		fmt.Println("Ошибка запуска сервера:", err)
@@ -99,6 +101,90 @@ func getGroups(db *sql.DB) ([]Group, error) {
 	}
 	return groups, nil
 }
+
+// func getGroupByIDHandler(w http.ResponseWriter, r *http.Request) {
+// 	// Подключение к базе данных
+// 	db, err := connectDB()
+// 	if err != nil {
+// 		http.Error(w, "Ошибка подключения к базе данных", http.StatusInternalServerError)
+// 		return
+// 	}
+// 	defer db.Close()
+
+// 	// Получение параметра id из строки запроса
+// 	id := r.URL.Query().Get("id")
+// 	if id == "" {
+// 		http.Error(w, "Параметр id обязателен", http.StatusBadRequest)
+// 		return
+// 	}
+
+// 	// Выполнение SQL-запроса с параметром
+// 	group, err := getGroupByID(db, id)
+// 	if err != nil {
+// 		http.Error(w, "Ошибка получения данных группы", http.StatusInternalServerError)
+// 		return
+// 	}
+
+// 	// Отправка результата в формате JSON
+// 	w.Header().Set("Content-Type", "application/json")
+// 	json.NewEncoder(w).Encode(group)
+// }
+
+func getGroupByNameHandler(w http.ResponseWriter, r *http.Request) {
+	// Подключение к базе данных
+	db, err := connectDB()
+	if err != nil {
+		http.Error(w, "Ошибка подключения к базе данных", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+
+	// Получение параметра group_name из строки запроса
+	groupName := r.URL.Query().Get("group_name")
+	if groupName == "" {
+		http.Error(w, "Параметр group_name обязателен", http.StatusBadRequest)
+		return
+	}
+
+	// Выполнение SQL-запроса с параметром
+	group, err := getGroupByName(db, groupName)
+	if err != nil {
+		http.Error(w, "Ошибка получения данных группы", http.StatusInternalServerError)
+		return
+	}
+
+	// Отправка результата в формате JSON
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(group)
+}
+
+func getGroupByName(db *sql.DB, groupName string) (*Group, error) {
+	var group Group
+
+	// Выполнение SQL-запроса с параметром
+	query := `SELECT id, group_name FROM groups WHERE group_name = $1`
+	err := db.QueryRow(query, groupName).Scan(&group.ID, &group.GroupName)
+	if err != nil {
+		return nil, err
+	}
+
+	return &group, nil
+}
+
+// func getGroupByID(db *sql.DB, id string) (*Group, error) {
+// 	var group Group
+
+// 	// Выполнение SQL-запроса с параметром
+// 	query := `SELECT id, group_name FROM groups WHERE id = $1`
+// 	err := db.QueryRow(query, id).Scan(&group.ID, &group.GroupName)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	return &group, nil
+// }
+
+
 
 func main() {
 	db, err := connectDB()

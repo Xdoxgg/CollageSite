@@ -18,5 +18,7 @@ CREATE TABLE IF NOT EXISTS lessons (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     lesson_number INTEGER,
+    lesson_day INTEGER,
+    place INTEGER,
     lesson_date DATE NOT NULL
 );
