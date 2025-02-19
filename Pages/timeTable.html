@@ -6,6 +6,7 @@
     <title>Моя страница</title>
 
     <link rel="stylesheet"  href="/Styles/timeTable.css">
+    <link rel="stylesheet"  href="../Styles/timeTable.css">
 
 
 </head>
@@ -186,8 +187,9 @@
 <script>
 
 
-const suggestions = JSON.parse('{{.}}'); 
+// const suggestions = JSON.parse('{{.}}');
 
+const suggestions = ["group1", "group2"]
 
 const input = document.getElementById("autocomplete-input");
 const list = document.getElementById("autocomplete-list");
@@ -196,10 +198,12 @@ const groups =[]
 
 // Функция для фильтрации и отображения вариантов
 input.addEventListener("input", () => {
+    // alert(suggestions)
   const query = input.value.toLowerCase();
   list.innerHTML = ""; // Очищаем список
 
   if (query) {
+      
     const filteredSuggestions = suggestions.filter(item => item.toLowerCase().includes(query));
     filteredSuggestions.forEach(item => {
       const listItem = document.createElement("div");

@@ -81,7 +81,7 @@ func handleRequest() {
 	}
 }
 
-func getStudents(db *sql.DB) ([]Group, error) {
+func getGroups(db *sql.DB) ([]Group, error) {
 	rows, err := db.Query(`SELECT id, group_name FROM groups`)
 	if err != nil {
 		return nil, err
