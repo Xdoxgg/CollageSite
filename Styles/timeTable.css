@@ -66,10 +66,15 @@ td:hover {
   }
 
   .autocomplete-item {
+    color: #333;
     padding: 8px;
     cursor: pointer;
   }
 
-  .autocomplete-item:hover {
+  /* .autocomplete-item:hover {
     background-color: #f0f0f0;
-  }
+  } */
+
+
+
+  

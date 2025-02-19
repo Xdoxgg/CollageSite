@@ -180,6 +180,7 @@
     </tr>
     </thead>
 </table>
+<!-- <button onclick="loadSuggestions()" style="width: 100x; height: 100px;"> click</button> -->
 
 </body>
 
@@ -187,23 +188,32 @@
 <script>
 
 
-// const suggestions = JSON.parse('{{.}}');
 
-const suggestions = ["group1", "group2"]
+const suggestions = []; // Изначально пустой массив
 
 const input = document.getElementById("autocomplete-input");
 const list = document.getElementById("autocomplete-list");
 
-const groups =[]
+// Функция для загрузки данных с сервера
+async function loadSuggestions() {
+  try {
+    const response = await fetch("/api/groups"); // Запрос к вашему API
+    const data = await response.json(); // Предполагаем, что сервер возвращает JSON
+    suggestions.push(...data.map(group => group.group_name)); // Добавляем данные в массив suggestions
+  } catch (error) {
+    alert("Ошибка загрузки данных:", error);
+  }
+}
+
+// Вызываем загрузку данных при загрузке страницы
+document.addEventListener("DOMContentLoaded", loadSuggestions);
 
 // Функция для фильтрации и отображения вариантов
 input.addEventListener("input", () => {
-    // alert(suggestions)
   const query = input.value.toLowerCase();
   list.innerHTML = ""; // Очищаем список
 
   if (query) {
-      
     const filteredSuggestions = suggestions.filter(item => item.toLowerCase().includes(query));
     filteredSuggestions.forEach(item => {
       const listItem = document.createElement("div");

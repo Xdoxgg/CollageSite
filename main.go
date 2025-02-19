@@ -59,7 +59,7 @@ func getGroupsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	groups, err := getStudents(db) // Получаем данные групп из базы
+	groups, err := getGroups(db) // Получаем данные групп из базы
 	if err != nil {
 		http.Error(w, "Ошибка получения данных групп", http.StatusInternalServerError)
 		return
@@ -107,6 +107,8 @@ func main() {
 		return
 	}
 	defer db.Close()
+
+
 
 	handleRequest()
 }
