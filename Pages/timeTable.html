@@ -225,7 +225,7 @@ input.addEventListener("input", () => {
         input.value = item; // Устанавливаем выбранное значение в текстовое поле
         list.innerHTML = ""; // Очищаем список
         list.style.display = "none"; // Скрываем список
-        
+       
         loadData(item)
       });
 
@@ -245,15 +245,15 @@ document.addEventListener("click", (event) => {
   }
 });
 
-function nono(){}
 async function loadData(item){
 
   event.preventDefault(); // Предотвращаем перезагрузку страницы
 
-  const groupName = item;
+  const groupName = "Group 1";
+  
   try {
     // Отправляем запрос на сервер
-    const response = await fetch('/api/group_by_name?group_name=' + encodeURIComponent(groupName), {
+    const response = await fetch('/api/lessons_by_group_name?group_name=' + encodeURIComponent(groupName), {
       method: 'GET',
     });
     if (!response.ok) {
@@ -271,6 +271,7 @@ async function loadData(item){
   }
 
 }
+
 
 </script>
 

@@ -1,73 +1,60 @@
--- Insert data into groups
+-- Вставка данных в таблицу groups
 INSERT INTO groups (group_name) VALUES
-('Group A'),
-('Group B'),
-('Group C');
+('Group 1'),
+('Group 2'),
+('Group 3'),
+('Group 4');
 
--- Insert data into students
+-- Вставка данных в таблицу students
 INSERT INTO students (group_id, student_name) VALUES
-(1, 'Alice Johnson'),
-(1, 'Bob Smith'),
-(1, 'Charlie Brown'),
-(1, 'Diana Prince'),
-(1, 'Eve Adams'),
-(1, 'Frank Castle'),
-(1, 'Grace Lee'),
-(1, 'Henry Kim'),
-(1, 'Isabella Rossi'),
-(1, 'Jack Tanaka'),
-(2, 'Karen Müller'),
-(2, 'Liam Dupont'),
-(2, 'Mia Fernandez'),
-(2, 'Noah Gonzalez'),
-(2, 'Olivia Morales'),
-(2, 'Pedro Ramirez'),
-(2, 'Qiu Li'),
-(2, 'Ravi Sharma'),
-(2, 'Sophia Nguyen'),
-(2, 'Tiago Costa'),
-(3, 'Ulrike Schneider'),
-(3, 'Valentina Rossi'),
-(3, 'Wei Chen'),
-(3, 'Xavier Dupont'),
-(3, 'Yuki Tanaka'),
-(3, 'Zara Khan');
+(1, 'Student 1.1'),
+(1, 'Student 1.2'),
+(1, 'Student 1.3'),
+(1, 'Student 1.4'),
+(1, 'Student 1.5'),
+(2, 'Student 2.1'),
+(2, 'Student 2.2'),
+(2, 'Student 2.3'),
+(2, 'Student 2.4'),
+(2, 'Student 2.5'),
+(3, 'Student 3.1'),
+(3, 'Student 3.2'),
+(3, 'Student 3.3'),
+(3, 'Student 3.4'),
+(3, 'Student 3.5'),
+(4, 'Student 4.1'),
+(4, 'Student 4.2'),
+(4, 'Student 4.3'),
+(4, 'Student 4.4'),
+(4, 'Student 4.5');
 
--- Insert data into lessons
-INSERT INTO lessons (title, lesson_number, lesson_day, place, lesson_date) VALUES
-('Math Basics', 1, 1, 101, '2025-02-01'),
-('Math Basics', 2, 2, 101, '2025-02-02'),
-('Math Basics', 3, 3, 101, '2025-02-03'),
-('Math Basics', 4, 4, 101, '2025-02-04'),
-('Math Basics', 5, 5, 101, '2025-02-05'),
-('Math Basics', 6, 6, 101, '2025-02-06'),
-('Advanced Math', 1, 1, 102, '2025-02-08'),
-('Advanced Math', 2, 2, 102, '2025-02-09'),
-('Advanced Math', 3, 3, 102, '2025-02-10'),
-('Advanced Math', 4, 4, 102, '2025-02-11'),
-('Advanced Math', 5, 5, 102, '2025-02-12'),
-('Advanced Math', 6, 6, 102, '2025-02-13'),
-('Physics Fundamentals', 1, 1, 103, '2025-02-15'),
-('Physics Fundamentals', 2, 2, 103, '2025-02-16'),
-('Physics Fundamentals', 3, 3, 103, '2025-02-17'),
-('Physics Fundamentals', 4, 4, 103, '2025-02-18'),
-('Physics Fundamentals', 5, 5, 103, '2025-02-19'),
-('Physics Fundamentals', 6, 6, 103, '2025-02-20'),
-('Advanced Physics', 1, 1, 104, '2025-02-22'),
-('Advanced Physics', 2, 2, 104, '2025-02-23'),
-('Advanced Physics', 3, 3, 104, '2025-02-24'),
-('Advanced Physics', 4, 4, 104, '2025-02-25'),
-('Advanced Physics', 5, 5, 104, '2025-02-26'),
-('Advanced Physics', 6, 6, 104, '2025-02-27'),
-('Chemistry Basics', 1, 1, 105, '2025-03-01'),
-('Chemistry Basics', 2, 2, 105, '2025-03-02'),
-('Chemistry Basics', 3, 3, 105, '2025-03-03'),
-('Chemistry Basics', 4, 4, 105, '2025-03-04'),
-('Chemistry Basics', 5, 5, 105, '2025-03-05'),
-('Chemistry Basics', 6, 6, 105, '2025-03-06'),
-('Organic Chemistry', 1, 1, 106, '2025-03-08'),
-('Organic Chemistry', 2, 2, 106, '2025-03-09'),
-('Organic Chemistry', 3, 3, 106, '2025-03-10'),
-('Organic Chemistry', 4, 4, 106, '2025-03-11'),
-('Organic Chemistry', 5, 5, 106, '2025-03-12'),
-('Organic Chemistry', 6, 6, 106, '2025-03-13');
+-- Вставка данных в таблицу lessons
+DO $$
+DECLARE
+    group_id INTEGER;
+    lesson_date DATE;
+    lesson_day INTEGER;
+    lesson_number INTEGER;
+    lesson_title TEXT;
+    place INTEGER;
+    place_counter INTEGER := 1;
+BEGIN
+    -- Перебираем группы
+    FOR group_id IN (SELECT id FROM groups) LOOP
+        lesson_date := '2025-02-17'; -- Начальная дата
+        lesson_day := 1; -- День недели
+        -- Для каждой группы создаем уроки на 6 дней недели
+        WHILE lesson_day <= 6 LOOP
+            -- Для каждого дня создаем 6 уроков
+            FOR lesson_number IN 1..6 LOOP
+                lesson_title := 'Lesson ' || lesson_number || ' for Group ' || group_id;
+                place := place_counter; -- Уникальный номер аудитории
+                INSERT INTO lessons (title, lesson_number, lesson_day, place, group_id, lesson_date)
+                VALUES (lesson_title, lesson_number, lesson_day, place, group_id, lesson_date);
+                place_counter := place_counter + 1; -- Увеличиваем счетчик аудиторий
+            END LOOP;
+            lesson_day := lesson_day + 1; -- Переход к следующему дню
+            lesson_date := lesson_date + INTERVAL '1 day'; -- Увеличиваем дату
+        END LOOP;
+    END LOOP;
+END $$;
