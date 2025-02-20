@@ -24,7 +24,10 @@ type Lesson struct {
 	ID           int    `json:"id"`
 	Title        string `json:"title"`
 	LessonNumber int    `json:"lesson_number"`
+	LessonDay 	 int 	`json:"lesson_day"`
 	LessonDate   int    `json:"lesson_date"`
+	Place		 int 	`json:"place"`
+	GroupID 	 int 	 `json:"group_id"`
 }
 
 func connectDB() (*sql.DB, error) {
@@ -85,33 +88,6 @@ func handleRequest() {
 	}
 }
 
-// func testHandler(w http.ResponseWriter, r *http.Request) {
-	
-// 	db, err := connectDB()
-// 	if err != nil {
-// 		http.Error(w, "Ошибка подключения к базе данных", http.StatusInternalServerError)
-// 		return
-// 	}
-// 	defer db.Close()
-
-// 	// Получение параметра group_name из строки запроса
-// 	groupName := r.URL.Query().Get("group_name")
-// 	if groupName == "" {
-// 		http.Error(w, "Параметр group_name обязателен", http.StatusBadRequest)
-// 		return
-// 	}
-
-
-// 	// Создаем данные, которые нужно отправить в формате JSON
-// 	data := map[string]string{
-// 		"message": "Привет, мир!",
-// 	}
-
-// 	// Устанавливаем заголовок Content-Type для указания, что ответ в формате JSON
-// 	w.Header().Set("Content-Type", "application/json")
-// 	json.NewEncoder(w).Encode(data)
-// }
-
 
 
 func getGroups(db *sql.DB) ([]Group, error) {
@@ -171,14 +147,15 @@ func getLessonsByGroupName(db *sql.DB, groupName string) ([]Lesson, error) {
 	// SQL-запрос для получения всех занятий для группы
 	query := `
 
-		SELECT title, lesson_number, lesson_date, group_name
+		SELECT lessons.id, title, lesson_number, lesson_day
 		FROM lessons
-		INNER JOIN groups ON lessons.group_id = groups.id
+		JOIN groups ON lessons.group_id = groups.id
 		WHERE group_name = $1
 	`
+	//$1
 	rows, err := db.Query(query, groupName)
 	if err != nil {
-		fmt.Println("query error")
+		fmt.Println(err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -186,9 +163,9 @@ func getLessonsByGroupName(db *sql.DB, groupName string) ([]Lesson, error) {
 	// Обработка результатов запроса
 	for rows.Next() {
 		var lesson Lesson
-		err := rows.Scan(&lesson.ID, &lesson.Title, &lesson.LessonNumber, &lesson.LessonDate)
+		err := rows.Scan(&lesson.ID, &lesson.Title, &lesson.LessonNumber, &lesson.LessonDay)
 		if err != nil {
-			fmt.Println("nil object")
+			fmt.Println(err)
 			return nil, err
 		}	
 		fmt.Println(lesson)
