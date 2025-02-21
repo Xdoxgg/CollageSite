@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS lessons (
     lesson_day INTEGER,
     place INTEGER,
     group_id INTEGER,
-    lesson_date DATE NOT NULL,
     FOREIGN KEY (group_id) REFERENCES groups(id)
 );
 

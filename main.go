@@ -152,23 +152,21 @@ func getLessonsByGroupName(db *sql.DB, groupName string) ([]Lesson, error) {
 		JOIN groups ON lessons.group_id = groups.id
 		WHERE group_name = $1
 	`
-	//$1
+
 	rows, err := db.Query(query, groupName)
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 	defer rows.Close()
-	fmt.Println(lessons)
 	// Обработка результатов запроса
 	for rows.Next() {
 		var lesson Lesson
 		err := rows.Scan(&lesson.ID, &lesson.Title, &lesson.LessonNumber, &lesson.LessonDay)
 		if err != nil {
-			fmt.Println(err)
+			
 			return nil, err
 		}	
-		fmt.Println(lesson)
+	
 		lessons = append(lessons, lesson)
 	}
 	return lessons, nil
