@@ -25,7 +25,6 @@ type Lesson struct {
 	Title        string `json:"title"`
 	LessonNumber int    `json:"lesson_number"`
 	LessonDay 	 int 	`json:"lesson_day"`
-	LessonDate   int    `json:"lesson_date"`
 	Place		 int 	`json:"place"`
 	GroupID 	 int 	 `json:"group_id"`
 }

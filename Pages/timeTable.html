@@ -205,6 +205,7 @@ async function loadData(item){
 function addTableData(data){
   
 // Получаем все строки таблицы из <tbody>
+
   const rows = document.querySelectorAll('tbody tr');
   const cells = document.querySelectorAll('tbody td');
 
@@ -230,6 +231,7 @@ rows.forEach(row => {
     row.appendChild(newCell);
     
   }
+ 
   rowIndex++;
 });
 }
@@ -237,6 +239,10 @@ rows.forEach(row => {
 function getCellData(data, i, lessonNumber){
   let retElement = null
   for (let i1 =0; i1<data.length; i1++) {
+    if(data[i1].lesson_number>=7){
+      alert(JSON.stringify(data[i1])+" "+i+" "+lessonNumber)
+
+    }
     if (data[i1].lesson_number == (lessonNumber+1) && data[i1].lesson_day == (i+1)){
       retElement=data[i1];
       break;
