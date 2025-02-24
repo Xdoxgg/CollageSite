@@ -11,13 +11,19 @@ import (
 
 type Group struct {
 	ID        int    `json:"id"`
-	GroupName string `json:"group_name"`
+	GroupName string `json:"name"`
 }
 
 type Student struct {
 	ID          int    `json:"id"`
 	GroupID     int    `json:"group_id"`
-	StudentName string `json:"student_name"`
+	StudentName string `json:"name"`
+}
+
+type Teacher struct {
+	ID int `json:"id"`
+	name string `json:"name"`
+
 }
 
 type Lesson struct {
@@ -90,6 +96,7 @@ func handleRequest() {
 
 
 func getGroups(db *sql.DB) ([]Group, error) {
+
 	rows, err := db.Query(`SELECT id, group_name FROM groups`)
 	if err != nil {
 		return nil, err
@@ -105,6 +112,7 @@ func getGroups(db *sql.DB) ([]Group, error) {
 		}
 		groups = append(groups, group)
 	}
+
 	return groups, nil
 }
 

@@ -127,7 +127,9 @@ async function loadSuggestions() {
   try {
     const response = await fetch("/api/groups"); // Запрос к вашему API
     const data = await response.json(); // Предполагаем, что сервер возвращает JSON
-    suggestions.push(...data.map(group => group.group_name)); // Добавляем данные в массив suggestions
+
+    suggestions.push(...data.map(group => group.name)); // Добавляем данные в массив suggestions
+
   } catch (error) {
     alert("Ошибка загрузки данных:", error);
   }
@@ -191,7 +193,7 @@ async function loadData(item){
     // Получаем данные из ответа
     const data = await response.json();
     addTableData(data)
-    // alert(JSON.stringify(data[0].title, null, 2));
+
     // Отображаем результат
     return JSON.stringify(data, null, 2);
   } catch (error) {
@@ -240,7 +242,6 @@ function getCellData(data, i, lessonNumber){
   let retElement = null
   for (let i1 =0; i1<data.length; i1++) {
     if(data[i1].lesson_number>=7){
-      alert(JSON.stringify(data[i1])+" "+i+" "+lessonNumber)
 
     }
     if (data[i1].lesson_number == (lessonNumber+1) && data[i1].lesson_day == (i+1)){
