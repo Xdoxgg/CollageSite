@@ -40,6 +40,13 @@ body {
     flex-direction: column; /* Добавлено для вертикального расположения */
 }
 
+.card-main button{
+    height: 48px;
+    width: 300px;
+    font-size: 34px;
+    border-radius: 20px;
+}
+
 .card-main-data {
     display: flex; /* Устанавливаем flex-контейнер */
     flex-direction: column; /* Устанавливаем направление по колонне */
