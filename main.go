@@ -97,7 +97,16 @@ func handleRequest() {
 
 func getGroups(db *sql.DB) ([]Group, error) {
 
-	rows, err := db.Query(`SELECT id, group_name FROM groups`)
+	rows, err := db.Query(`
+	SELECT id, group_name 
+	FROM groups
+	UNION
+	SELECT id, teacher_name
+	FROM teachers
+	
+	`)
+
+
 	if err != nil {
 		return nil, err
 	}
@@ -156,8 +165,8 @@ func getLessonsByGroupName(db *sql.DB, groupName string) ([]Lesson, error) {
 
 		SELECT lessons.id, title, lesson_number, lesson_day
 		FROM lessons
-		JOIN groups ON lessons.group_id = groups.id
-		WHERE group_name = $1
+		JOIN groups ON lessons.group_id = groups.id JOIN teachers on lessons.teacher_id = teachers.id
+		WHERE group_name = $1 or teacher_name = $1
 	`
 
 	rows, err := db.Query(query, groupName)
