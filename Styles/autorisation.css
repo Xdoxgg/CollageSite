@@ -1,8 +1,8 @@
-﻿/* background */
+﻿
 body {
     width: 99%;
     height: 100%;
-    --s: 200px; /* control the size */
+    --s: 200px;
     --c1: #1d1d1d;
     --c2: #4e4f51;
     --c3: #3c3c3c;
@@ -22,11 +22,11 @@ body {
     background-size: var(--s) calc(var(--s) * 0.577);
 }
 body {
-    display: flex; /* Используем Flexbox для родительского элемента */
-    justify-content: center; /* Центрируем по горизонтали */
-    align-items: center; /* Центрируем по вертикали */
-    height: 100vh; /* Высота на весь экран */
-    margin: 0; /* Убираем отступы по умолчанию */
+    display: flex; 
+    justify-content: center;
+    align-items: center; 
+    height: 100vh; 
+    margin: 0; 
 }
 
 .card-main {
@@ -36,8 +36,8 @@ body {
     background: #6E473B;
     border-radius: 20px;
     width: 450px;
-    height: 600px; /* Высота элемента */
-    flex-direction: column; /* Добавлено для вертикального расположения */
+    height: 600px;
+    flex-direction: column; 
 }
 
 .card-main button{
@@ -47,7 +47,14 @@ body {
     width: 300px;
     font-size: 34px;
     border-radius: 20px;
+    transition: border-radius 0.3s ease;
+    
 }
+
+.card-main button:hover{
+    border-radius: 0px;
+}
+
 .card-main-data {
     display: flex;
     align-items: center;
@@ -79,10 +86,10 @@ body {
 }
 
 
-
 .enter-words {
     position: relative;
     bottom: 100px;
     display: flex;
-    
+    font-size: 40px;
+    color: #E1D4C2;
 }
