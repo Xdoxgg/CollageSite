@@ -12,19 +12,72 @@
     <label class="enter-words">Вход в аккаунт</label>
     <label class="card-main-data">
         <span>Имя&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <input required="" placeholder="" type="text" id="user_name">
+        <input required="" placeholder="" type="text" id="user_name" name = "user_name">
     </label>
     <label class="card-main-data">
         <span>Пароль</span>
-        <input required="" placeholder="" type="password" id="user_data">
+        <input required="" placeholder="" type="password" id="user_password" name="user_password">
     </label>
-    <button>Войти</button>
+    <button onclick="register()">Войти</button>
 </form>
 
 </body>
 <script>
     
-    
-    
+    function register() {
+  const name = document.getElementById('user_name').value;
+  const password = document.getElementById('user_password').value;
+
+  loadData(name, password)
+    .then(res => {
+      if (res) {
+       
+        const user = {
+          uName: name,
+          uDate: password
+        };
+        localStorage.setItem('user', user)
+         document.location.href = '/Pages/personalAccount.html'
+        alert('find')
+
+
+        
+      } else {
+        alert('вы вввели неправильные данные')
+      }
+    })
+    .catch(error => {
+      console.error('Ошибка:', error);
+      alert('Ошибка: ' + error.message);
+    });
+}
+
+    function loadData(name, password) {
+  return new Promise((resolve, reject) => {
+    event.preventDefault(); // Предотвращаем перезагрузку страницы
+
+    // Отправляем запрос на сервер
+    fetch('/api/student_by_input_data?s_name=' + encodeURIComponent(name) + '&s_password=' + encodeURIComponent(password), {
+      method: 'GET',
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Ошибка запроса: ' + response.statusText);
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Отображаем результат
+      resolve(data);
+    })
+    .catch(error => {
+      console.error('Ошибка:', error);
+      alert('Ошибка: ' + error.message);
+      reject(error);
+    });
+  });
+}
+
+
 </script>
 </html>

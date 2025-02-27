@@ -16,12 +16,13 @@ type Group struct {
 
 type Student struct {
 	ID          int    `json:"id"`
+	StudentDate string `json:"student_date"`
 	GroupID     int    `json:"group_id"`
 	StudentName string `json:"name"`
 }
 
 type Teacher struct {
-	ID int `json:"id"`
+	ID 	 int 	`json:"id"`
 	name string `json:"name"`
 
 }
@@ -32,7 +33,7 @@ type Lesson struct {
 	LessonNumber int    `json:"lesson_number"`
 	LessonDay 	 int 	`json:"lesson_day"`
 	Place		 int 	`json:"place"`
-	GroupID 	 int 	 `json:"group_id"`
+	GroupID 	 int 	`json:"group_id"`
 }
 
 func connectDB() (*sql.DB, error) {
@@ -77,22 +78,6 @@ func getGroupsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(groups)
 }
-
-func handleRequest() {
-	http.Handle("/Styles/", http.StripPrefix("/Styles/", http.FileServer(http.Dir("./Styles/"))))
-	http.Handle("/Pages/", http.StripPrefix("/Pages/", http.FileServer(http.Dir("./Pages/"))))
-	http.HandleFunc("/", index)
-	http.HandleFunc("/api/groups", getGroupsHandler) // Новый API-эндпоинт
-	
-	http.HandleFunc("/api/lessons_by_group_name", getLessonsByGroupNameHandler)
-	// http.HandleFunc("/api/test", testHandler)
-
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
-		fmt.Println("Ошибка запуска сервера:", err)
-	}
-}
-
 
 
 func getGroups(db *sql.DB) ([]Group, error) {
@@ -187,6 +172,144 @@ func getLessonsByGroupName(db *sql.DB, groupName string) ([]Lesson, error) {
 	}
 	return lessons, nil
 }
+
+
+
+func getStudentNametudentByInputDataHandler(w http.ResponseWriter, r *http.Request) {
+	// Подключение к базе данных
+	db, err := connectDB()
+	if err != nil {
+		http.Error(w, "Ошибка подключения к базе данных", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+
+	
+	sPassword := r.URL.Query().Get("s_name")
+	if sPassword== "" {
+		http.Error(w, "Параметр имя обязателен", http.StatusBadRequest)
+		return
+	}
+	sName := r.URL.Query().Get("s_password")
+	if sName == "" {
+		http.Error(w, "Параметр пароль обязателен", http.StatusBadRequest)
+		return
+	}
+
+
+	res, err := getStudentByInputData(db, sName, sPassword)
+	if err != nil {
+		http.Error(w, "Ошибка получения данных занятий", http.StatusInternalServerError)
+		return
+	}
+
+	// Отправка результата в формате JSON
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(res)
+}
+
+func getStudentByInputData(db *sql.DB, sName string, sPassword string) (bool, error) {
+
+	query := `
+		SELECT * FROM students
+		WHERE student_date = $1 and student_name = $2
+	`
+
+	rows, err := db.Query(query, sName, sPassword)
+	if err != nil {
+		return false, err
+	}
+	defer rows.Close()
+
+	// Обработка результатов запроса
+	for rows.Next() {
+		
+		var student Student
+		err := rows.Scan(&student.ID, &student.StudentDate,  &student.GroupID, &student.StudentName)
+		fmt.Println(student)
+		if err != nil {
+			return false, err
+		}	
+	
+		
+	}
+
+	return true, nil
+}
+
+
+func getStudentHandler(w http.ResponseWriter, r *http.Request) {
+	db, err := connectDB()
+	if err != nil {
+		http.Error(w, "Ошибка подключения к базе данных", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+
+
+	sPassword := r.URL.Query().Get("s_name")
+	if sPassword== "" {
+		http.Error(w, "Параметр имя обязателен", http.StatusBadRequest)
+		return
+	}
+	sName := r.URL.Query().Get("s_password")
+	if sName == "" {
+		http.Error(w, "Параметр пароль обязателен", http.StatusBadRequest)
+		return
+	}
+	student, err := getStudent(db, sName, sPassword)
+	// Преобразуем данные в JSON и отправляем клиенту
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(student)
+}
+
+func getStudent(db *sql.DB, sName string, sPassword string) (Student, error) {
+    query := `
+        SELECT *
+        FROM students
+        WHERE student_name = $1 AND student_date = $2
+    `
+
+    rows, err := db.Query(query, sName, sPassword)
+    if err != nil {
+        return Student{}, err
+    }
+    defer rows.Close()
+
+    var student Student
+    for rows.Next() {
+        err := rows.Scan(&student.ID, &student.StudentDate, &student.GroupID, &student.StudentName)
+        if err != nil {
+            return Student{}, err
+        }
+    }
+
+
+    return student, nil
+}
+
+
+func handleRequest() {
+	http.Handle("/Styles/", http.StripPrefix("/Styles/", http.FileServer(http.Dir("./Styles/"))))
+	http.Handle("/Pages/", http.StripPrefix("/Pages/", http.FileServer(http.Dir("./Pages/"))))
+	http.Handle("/Scripts/", http.StripPrefix("/Scripts/", http.FileServer(http.Dir("./Scripts/"))))
+
+	http.HandleFunc("/", index)
+	http.HandleFunc("/api/groups", getGroupsHandler) // Новый API-эндпоинт
+	
+	http.HandleFunc("/api/lessons_by_group_name", getLessonsByGroupNameHandler)
+	http.HandleFunc("/api/student_by_input_data", getStudentNametudentByInputDataHandler)
+	http.HandleFunc("/api/stuent_data", getStudentHandler)
+
+
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		fmt.Println("Ошибка запуска сервера:", err)
+	}
+}
+
+
+
 
 func main() {
 	db, err := connectDB()

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/Styles/personalAccount.css">
     <link rel="stylesheet" href="../Styles/main.css">
     <link rel="stylesheet" href="/Styles/main.css">
+    
 </head>
 <body>
 <div class="left-menu">
@@ -29,6 +30,9 @@
 </div>
 </body>
 
+
+<script src="../Scripts/main.js"></script>
+<script src="/Scripts/main.js"></script>
 <script>
 
     function goToPage(link){
@@ -41,11 +45,11 @@
 
     function setUserCardName(text) {
         document.getElementById('userCardName').textContent = text;
-
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-
+        const user = getUserData();
+        alert(user);
         setUserCardGroup('T-294');
         setUserCardName('Жук Михаил Дмитриевич');
     });

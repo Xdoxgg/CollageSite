@@ -18,6 +18,13 @@ INSERT INTO students (group_id, student_name) VALUES
 (2, 'Diana Black'),
 (3, 'Eve Blue');
 
+
+-- Чёткий парень
+
+INSERT INTO students (group_id, student_name, student_date) VALUES 
+(1, 'Крутой тип', '2007-05-29');
+
+
 -- Сиды для таблицы lessons
 INSERT INTO lessons (title, lesson_number, lesson_day, place, group_id, teacher_id) VALUES 
 -- День 1
