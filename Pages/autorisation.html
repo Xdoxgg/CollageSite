@@ -37,11 +37,10 @@
           uDate: password
         };
         localStorage.setItem('user', user)
-         document.location.href = '/Pages/personalAccount.html'
-        alert('find')
+        document.location.href = '/Pages/personalAccount.html'
 
 
-        
+
       } else {
         alert('вы вввели неправильные данные')
       }
@@ -72,7 +71,6 @@
     })
     .catch(error => {
       console.error('Ошибка:', error);
-      alert('Ошибка: ' + error.message);
       reject(error);
     });
   });

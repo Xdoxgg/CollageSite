@@ -31,8 +31,7 @@
 </body>
 
 
-<script src="../Scripts/main.js"></script>
-<script src="/Scripts/main.js"></script>
+
 <script>
 
     function goToPage(link){
@@ -50,11 +49,13 @@
     document.addEventListener('DOMContentLoaded', function() {
         const user = getUserData();
         alert(user);
-        setUserCardGroup('T-294');
-        setUserCardName('Жук Михаил Дмитриевич');
+        setUserCardGroup(user.grouoId);
+        setUserCardName(user.sName);
     });
 
-    
+
+
+
 </script>
 
 </html>

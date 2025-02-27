@@ -226,7 +226,6 @@ func getStudentByInputData(db *sql.DB, sName string, sPassword string) (bool, er
 		
 		var student Student
 		err := rows.Scan(&student.ID, &student.StudentDate,  &student.GroupID, &student.StudentName)
-		fmt.Println(student)
 		if err != nil {
 			return false, err
 		}	
