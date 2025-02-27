@@ -36,7 +36,8 @@
           uName: name,
           uDate: password
         };
-        localStorage.setItem('user', user)
+        localStorage.setItem('user', JSON.stringify(user))
+        alert(JSON.stringify(user))
         document.location.href = '/Pages/personalAccount.html'
 
 

@@ -31,6 +31,8 @@
 </body>
 
 
+<script src="../Scripts/mainScripts.js"></script>
+<script src="/Scripts/mainScripts.js"></script>
 
 <script>
 
@@ -46,14 +48,38 @@
         document.getElementById('userCardName').textContent = text;
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const user = getUserData();
-        alert(user);
-        setUserCardGroup(user.grouoId);
-        setUserCardName(user.sName);
-    });
+    document.addEventListener('DOMContentLoaded',setUserData)
 
+    async function setUserData() {
+        
+        user = await getItemFromLocalStorage('user');
+        alert(user)
+        try{
+            user = JSON.stringify(user)
 
+        }
+        catch (ex){
+            alert(ex)
+        }
+        try {
+            const response = await fetch('/api/stuent_data?s_name=' + encodeURIComponent(user.uName)+'&s_password='+encodeURIComponent(user.uPassword), {
+            method: 'GET',
+        });
+        if (!response.ok) {
+            throw new Error('Ошибка запроса: ' + response.statusText);
+        }
+
+   
+        const data = await response.json();
+        alert(data)
+        setUserCardGroup(data)
+setUserCardName(user.uName)
+        return JSON.stringify(data, null, 2);
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Ошибка: ' + error.message);
+        }
+    }
 
 
 </script>

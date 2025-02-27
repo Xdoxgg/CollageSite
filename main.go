@@ -262,24 +262,24 @@ func getStudentHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(student)
 }
 
-func getStudent(db *sql.DB, sName string, sPassword string) (Student, error) {
+func getStudent(db *sql.DB, sName string, sPassword string) (string, error) {
     query := `
-        SELECT *
-        FROM students
+        SELECT group_name
+        FROM groups JOIN students USING(id)
         WHERE student_name = $1 AND student_date = $2
     `
 
     rows, err := db.Query(query, sName, sPassword)
     if err != nil {
-        return Student{}, err
+        return "", err
     }
     defer rows.Close()
 
-    var student Student
+    var student string
     for rows.Next() {
-        err := rows.Scan(&student.ID, &student.StudentDate, &student.GroupID, &student.StudentName)
+        err := rows.Scan(&student)
         if err != nil {
-            return Student{}, err
+            return "", err
         }
     }
 
