@@ -3,10 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Личный кабинет</title>
-    
-    
+    <link rel="stylesheet" href="../Styles/personalAccount.css">
+    <link rel="stylesheet" href="/Styles/personalAccount.css">
+    <link rel="stylesheet" href="../Styles/main.css">
+    <link rel="stylesheet" href="/Styles/main.css">
 </head>
 <body>
-
+<div class="left-menu">
+    <nav>
+        <ul>
+            <li>
+                <button onclick="goToPage('../Pages/timeTable.html')">Расписание</button>
+            </li>
+            <li>
+                <button onclick="goToPage('../Pages/timeTable.html')">Оценки</button>
+            </li>
+        </ul>
+    </nav>
+</div>
+<div class="user-card">
+    <div class="user-card-name" >
+        <div class="user-card-name-text" id="userCardName"></div>
+    </div>
+    <div class="user-card-group" id="userCardGroup"></div>
+</div>
 </body>
+
+<script>
+
+    function goToPage(link){
+        document.location.href = link;
+    }
+    
+    function setUserCardGroup(text) {
+        document.getElementById('userCardGroup').textContent = text;
+    }
+
+    function setUserCardName(text) {
+        document.getElementById('userCardName').textContent = text;
+
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        setUserCardGroup('T-294');
+        setUserCardName('Жук Михаил Дмитриевич');
+    });
+
+    
+</script>
+
 </html>
