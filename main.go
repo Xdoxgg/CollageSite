@@ -246,12 +246,12 @@ func getStudentHandler(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 
-	sPassword := r.URL.Query().Get("s_name")
+	sPassword := r.URL.Query().Get("s_password")
 	if sPassword== "" {
 		http.Error(w, "Параметр имя обязателен", http.StatusBadRequest)
 		return
 	}
-	sName := r.URL.Query().Get("s_password")
+	sName := r.URL.Query().Get("s_name")
 	if sName == "" {
 		http.Error(w, "Параметр пароль обязателен", http.StatusBadRequest)
 		return
@@ -263,15 +263,17 @@ func getStudentHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getStudent(db *sql.DB, sName string, sPassword string) (string, error) {
+
     query := `
         SELECT group_name
-        FROM groups JOIN students USING(id)
+        FROM students JOIN groups ON (group_id=groups.id)
         WHERE student_name = $1 AND student_date = $2
     `
 
     rows, err := db.Query(query, sName, sPassword)
     if err != nil {
-        return "", err
+		fmt.Println(err)
+        return "no", err
     }
     defer rows.Close()
 
@@ -279,10 +281,12 @@ func getStudent(db *sql.DB, sName string, sPassword string) (string, error) {
     for rows.Next() {
         err := rows.Scan(&student)
         if err != nil {
-            return "", err
+		fmt.Println(err)
+
+            return "no", err
         }
     }
-
+	fmt.Println("data:"+student)
 
     return student, nil
 }

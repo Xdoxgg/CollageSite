@@ -55,14 +55,15 @@
         user = await getItemFromLocalStorage('user');
         alert(user)
         try{
-            user = JSON.stringify(user)
-
+            user = JSON.parse(user)
+     
         }
         catch (ex){
             alert(ex)
         }
         try {
-            const response = await fetch('/api/stuent_data?s_name=' + encodeURIComponent(user.uName)+'&s_password='+encodeURIComponent(user.uPassword), {
+         
+            const response = await fetch('/api/stuent_data?s_name=' + encodeURIComponent(user.uName)+'&s_password='+encodeURIComponent(user.uDate), {
             method: 'GET',
         });
         if (!response.ok) {
