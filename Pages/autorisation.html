@@ -24,9 +24,24 @@
 </body>
 <script>
     
+    document.addEventListener('DOMContentLoaded', function() {
+        if (localStorage.getItem('user') != null) {
+            const user = JSON.parse(localStorage.getItem('user'));
+            document.getElementById('user_name').value = user.uName; 
+            document.getElementById('user_password').value = user.uDate; 
+        }
+    });
+
+
     function register() {
+
+
+
+
   const name = document.getElementById('user_name').value;
   const password = document.getElementById('user_password').value;
+
+
 
   loadData(name, password)
     .then(res => {
@@ -37,7 +52,6 @@
           uDate: password
         };
         localStorage.setItem('user', JSON.stringify(user))
-        alert(JSON.stringify(user))
         document.location.href = '/Pages/personalAccount.html'
 
 

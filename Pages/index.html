@@ -46,10 +46,45 @@
 <div class="content">
    
 </div>
-    
+<script src="../Scripts/mainScripts.js"></script>
+<script src="/Scripts/mainScripts.js"></script>
 <script>
 
    
+
+
+async function setUserData() {
+        
+        user = await getItemFromLocalStorage('user');
+        try{
+            user = JSON.parse(user)
+     
+        }
+        catch (ex){
+            alert(ex)
+        }
+        try {
+         
+            const response = await fetch('/api/stuent_data?s_name=' + encodeURIComponent(user.uName)+'&s_password='+encodeURIComponent(user.uDate), {
+            method: 'GET',
+        });
+        if (!response.ok) {
+            throw new Error('Ошибка запроса: ' + response.statusText);
+        }
+
+   
+        const data = await response.json();
+
+        setUserCardGroup(data)
+setUserCardName(user.uName)
+        return JSON.stringify(data, null, 2);
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Ошибка: ' + error.message);
+        }
+    }
+
+
 
     function setUserCardGroup(text) {
         document.getElementById('userCardGroup').textContent = text;
@@ -61,9 +96,10 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        
-        setUserCardGroup('T-294');
-        setUserCardName('Жук Михаил Дмитриевич');
+        if (localStorage.getItem('user')!=null){
+            setUserData()
+        }
+       
     });
 </script>
 
