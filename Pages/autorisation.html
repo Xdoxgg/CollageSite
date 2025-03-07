@@ -1,4 +1,4 @@
-﻿<html>
+﻿<html lang="ru">
 <head>
     <meta charset="UTF-8">
 
@@ -12,7 +12,7 @@
     <label class="enter-words">Вход в аккаунт</label>
     <label class="card-main-data">
         <span>Имя&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <input required="" placeholder="" type="text" id="user_name" name = "user_name">
+        <input required="" placeholder="" type="text" id="user_name" name="user_name">
     </label>
     <label class="card-main-data">
         <span>Пароль</span>
@@ -23,12 +23,12 @@
 
 </body>
 <script>
-    
-    document.addEventListener('DOMContentLoaded', function() {
+
+    document.addEventListener('DOMContentLoaded', function () {
         if (localStorage.getItem('user') != null) {
             const user = JSON.parse(localStorage.getItem('user'));
-            document.getElementById('user_name').value = user.uName; 
-            document.getElementById('user_password').value = user.uDate; 
+            document.getElementById('user_name').value = user.uName;
+            document.getElementById('user_password').value = user.uDate;
         }
     });
 
@@ -36,60 +36,56 @@
     function register() {
 
 
+        const name = document.getElementById('user_name').value;
+        const password = document.getElementById('user_password').value;
 
 
-  const name = document.getElementById('user_name').value;
-  const password = document.getElementById('user_password').value;
+        loadData(name, password)
+            .then(res => {
+                if (res) {
+
+                    const user = {
+                        uName: name,
+                        uDate: password
+                    };
+                    localStorage.setItem('user', JSON.stringify(user))
+                    document.location.href = '/Pages/personalAccount.html'
 
 
-
-  loadData(name, password)
-    .then(res => {
-      if (res) {
-       
-        const user = {
-          uName: name,
-          uDate: password
-        };
-        localStorage.setItem('user', JSON.stringify(user))
-        document.location.href = '/Pages/personalAccount.html'
-
-
-
-      } else {
-        alert('вы вввели неправильные данные')
-      }
-    })
-    .catch(error => {
-      console.error('Ошибка:', error);
-      alert('Ошибка: ' + error.message);
-    });
-}
+                } else {
+                    alert('вы вввели неправильные данные')
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка: ' + error.message);
+            });
+    }
 
     function loadData(name, password) {
-  return new Promise((resolve, reject) => {
-    event.preventDefault(); // Предотвращаем перезагрузку страницы
+        return new Promise((resolve, reject) => {
+            event.preventDefault(); // Предотвращаем перезагрузку страницы
 
-    // Отправляем запрос на сервер
-    fetch('/api/student_by_input_data?s_name=' + encodeURIComponent(name) + '&s_password=' + encodeURIComponent(password), {
-      method: 'GET',
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Ошибка запроса: ' + response.statusText);
-      }
-      return response.json();
-    })
-    .then(data => {
-      // Отображаем результат
-      resolve(data);
-    })
-    .catch(error => {
-      console.error('Ошибка:', error);
-      reject(error);
-    });
-  });
-}
+            // Отправляем запрос на сервер
+            fetch('/api/student_by_input_data?s_name=' + encodeURIComponent(name) + '&s_password=' + encodeURIComponent(password), {
+                method: 'GET',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка запроса: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Отображаем результат
+                    resolve(data);
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    reject(error);
+                });
+        });
+    }
 
 
 </script>

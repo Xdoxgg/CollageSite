@@ -10,80 +10,78 @@
 
 </head>
 <body>
-    <header class="top-panel">
-        <nav class="nav-menu">
-            <ul >
-                <li><a href="#">Главная</a></li>
-                <li><a href="#">Абитуриентам<span class="arrow">▼</span></a>
+<header class="top-panel">
+    <nav class="nav-menu">
+        <ul>
+            <li><a href="#">Главная</a></li>
+            <li><a href="#">Абитуриентам<span class="arrow">▼</span></a>
                 <ul class="submenu">
                     <li><a href="#">Расписание</a></li>
-                
+
                     <li><a href="#">Оценки</a></li>
-                </ul></li>
-                <li> <a href="#">Учащимся<span class="arrow">▼</span></a>
-                    <ul class="submenu">
-                        <li><a href="../Pages/timeTable.html">Расписание</a></li>
-                
-                        <li><a href="#">Оценки</a></li>
-                    </ul>
+                </ul>
+            </li>
+            <li><a href="#">Учащимся<span class="arrow">▼</span></a>
+                <ul class="submenu">
+                    <li><a href="../Pages/timeTable.html">Расписание</a></li>
 
-                </li>
-                <li><a href="#">Контакты</a></li>
-                <li><a href="../Pages/autorisation.html">Аккаунт</a></li>
+                    <li><a href="#">Оценки</a></li>
+                </ul>
 
-            </ul>
-            
-        </nav>
-        <div class="user-card">
-            <div class="user-card-group" id="userCardGroup"></div>
-            <div class="user-card-name" ><div class="user-card-name-text" id="userCardName"></div></div>
+            </li>
+            <li><a href="#">Контакты</a></li>
+            <li><a href="../Pages/autorisation.html">Аккаунт</a></li>
+
+        </ul>
+
+    </nav>
+    <div class="user-card">
+        <div class="user-card-group" id="userCardGroup"></div>
+        <div class="user-card-name">
+            <div class="user-card-name-text" id="userCardName"></div>
         </div>
-      <!-- <div class="test">hello world</div> -->
-    </header>
+    </div>
+    <!-- <div class="test">hello world</div> -->
+</header>
 
 
-    
 <div class="content">
-   
+
 </div>
 <script src="../Scripts/mainScripts.js"></script>
 <script src="/Scripts/mainScripts.js"></script>
 <script>
 
-   
 
+    async function setUserData() {
 
-async function setUserData() {
-        
         user = await getItemFromLocalStorage('user');
-        try{
+        try {
             user = JSON.parse(user)
-     
-        }
-        catch (ex){
+
+        } catch (ex) {
             alert(ex)
         }
         try {
-         
-            const response = await fetch('/api/stuent_data?s_name=' + encodeURIComponent(user.uName)+'&s_password='+encodeURIComponent(user.uDate), {
-            method: 'GET',
-        });
-        if (!response.ok) {
-            throw new Error('Ошибка запроса: ' + response.statusText);
-        }
 
-   
-        const data = await response.json();
+            const response = await fetch('/api/student_data?s_name=' + encodeURIComponent(user.uName) + '&s_password=' + encodeURIComponent(user.uDate), {
+                method: 'GET',
+            });
+            if (!response.ok) {
+                throw new Error('Ошибка запроса: ' + response.statusText);
+            }
 
-        setUserCardGroup(data)
-setUserCardName(user.uName)
-        return JSON.stringify(data, null, 2);
+
+            const data = await response.json();
+
+            setUserCardGroup(data)
+            setUserCardName(user.uName)
+            return JSON.stringify(data, null, 2);
         } catch (error) {
             console.error('Ошибка:', error);
             alert('Ошибка: ' + error.message);
         }
     }
-
 
 
     function setUserCardGroup(text) {
@@ -92,18 +90,16 @@ setUserCardName(user.uName)
 
     function setUserCardName(text) {
         document.getElementById('userCardName').textContent = text;
-        
+
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        if (localStorage.getItem('user')!=null){
+    document.addEventListener('DOMContentLoaded', function () {
+        if (localStorage.getItem('user') != null) {
             setUserData()
         }
-       
+
     });
 </script>
-
-
 
 
 </body>

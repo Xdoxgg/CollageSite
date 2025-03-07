@@ -1,12 +1,12 @@
-﻿package main
+package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
+	_ "github.com/lib/pq" // анонимный импорт
 	"html/template"
 	"net/http"
-	"encoding/json"
-	_ "github.com/lib/pq" // Используем "_" для импорта драйвера pq
 )
 
 type Group struct {
@@ -22,23 +22,22 @@ type Student struct {
 }
 
 type Teacher struct {
-	ID 	 int 	`json:"id"`
+	ID   int    `json:"id"`
 	name string `json:"name"`
-
 }
 
 type Lesson struct {
 	ID           int    `json:"id"`
 	Title        string `json:"title"`
 	LessonNumber int    `json:"lesson_number"`
-	LessonDay 	 int 	`json:"lesson_day"`
-	Place		 int 	`json:"place"`
-	GroupID 	 int 	`json:"group_id"`
+	LessonDay    int    `json:"lesson_day"`
+	Place        int    `json:"place"`
+	GroupID      int    `json:"group_id"`
 }
 
 func connectDB() (*sql.DB, error) {
 	connStr := "host=localhost port=5432 user=postgres password=postgres dbname=postgres sslmode=disable"
-    db, err := sql.Open("postgres", connStr)
+	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		fmt.Println("Ошибка подключения к базе данных:", err)
 		return nil, err
@@ -79,7 +78,6 @@ func getGroupsHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(groups)
 }
 
-
 func getGroups(db *sql.DB) ([]Group, error) {
 
 	rows, err := db.Query(`
@@ -90,7 +88,6 @@ func getGroups(db *sql.DB) ([]Group, error) {
 	FROM teachers
 	
 	`)
-
 
 	if err != nil {
 		return nil, err
@@ -109,9 +106,6 @@ func getGroups(db *sql.DB) ([]Group, error) {
 
 	return groups, nil
 }
-
-
-
 
 func getLessonsByGroupNameHandler(w http.ResponseWriter, r *http.Request) {
 	// Подключение к базе данных
@@ -144,7 +138,6 @@ func getLessonsByGroupNameHandler(w http.ResponseWriter, r *http.Request) {
 func getLessonsByGroupName(db *sql.DB, groupName string) ([]Lesson, error) {
 	var lessons []Lesson
 
-
 	// SQL-запрос для получения всех занятий для группы
 	query := `
 
@@ -164,18 +157,16 @@ func getLessonsByGroupName(db *sql.DB, groupName string) ([]Lesson, error) {
 		var lesson Lesson
 		err := rows.Scan(&lesson.ID, &lesson.Title, &lesson.LessonNumber, &lesson.LessonDay)
 		if err != nil {
-			
+
 			return nil, err
-		}	
-	
+		}
+
 		lessons = append(lessons, lesson)
 	}
 	return lessons, nil
 }
 
-
-
-func getStudentNametudentByInputDataHandler(w http.ResponseWriter, r *http.Request) {
+func getStudentNameByInputDataHandler(w http.ResponseWriter, r *http.Request) {
 	// Подключение к базе данных
 	db, err := connectDB()
 	if err != nil {
@@ -184,9 +175,8 @@ func getStudentNametudentByInputDataHandler(w http.ResponseWriter, r *http.Reque
 	}
 	defer db.Close()
 
-	
 	sPassword := r.URL.Query().Get("s_name")
-	if sPassword== "" {
+	if sPassword == "" {
 		http.Error(w, "Параметр имя обязателен", http.StatusBadRequest)
 		return
 	}
@@ -195,7 +185,6 @@ func getStudentNametudentByInputDataHandler(w http.ResponseWriter, r *http.Reque
 		http.Error(w, "Параметр пароль обязателен", http.StatusBadRequest)
 		return
 	}
-
 
 	res, err := getStudentByInputData(db, sName, sPassword)
 	if err != nil {
@@ -221,21 +210,23 @@ func getStudentByInputData(db *sql.DB, sName string, sPassword string) (bool, er
 	}
 	defer rows.Close()
 
+	if !rows.Next() {
+		return false, nil // Нет строк, возвращаем false
+	}
+
 	// Обработка результатов запроса
 	for rows.Next() {
-		
+
 		var student Student
-		err := rows.Scan(&student.ID, &student.StudentDate,  &student.GroupID, &student.StudentName)
+		err := rows.Scan(&student.ID, &student.StudentDate, &student.GroupID, &student.StudentName)
 		if err != nil {
 			return false, err
-		}	
-	
-		
+		}
+
 	}
 
 	return true, nil
 }
-
 
 func getStudentHandler(w http.ResponseWriter, r *http.Request) {
 	db, err := connectDB()
@@ -245,9 +236,8 @@ func getStudentHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-
 	sPassword := r.URL.Query().Get("s_password")
-	if sPassword== "" {
+	if sPassword == "" {
 		http.Error(w, "Параметр имя обязателен", http.StatusBadRequest)
 		return
 	}
@@ -264,33 +254,31 @@ func getStudentHandler(w http.ResponseWriter, r *http.Request) {
 
 func getStudent(db *sql.DB, sName string, sPassword string) (string, error) {
 
-    query := `
+	query := `
         SELECT group_name
         FROM students JOIN groups ON (group_id=groups.id)
         WHERE student_name = $1 AND student_date = $2
     `
 
-    rows, err := db.Query(query, sName, sPassword)
-    if err != nil {
+	rows, err := db.Query(query, sName, sPassword)
+	if err != nil {
 		fmt.Println(err)
-        return "no", err
-    }
-    defer rows.Close()
+		return "no", err
+	}
+	defer rows.Close()
 
-    var student string
-    for rows.Next() {
-        err := rows.Scan(&student)
-        if err != nil {
-		fmt.Println(err)
+	var student string
+	for rows.Next() {
+		err := rows.Scan(&student)
+		if err != nil {
+			fmt.Println(err)
 
-            return "no", err
-        }
-    }
-	fmt.Println("data:"+student)
+			return "no", err
+		}
+	}
 
-    return student, nil
+	return student, nil
 }
-
 
 func handleRequest() {
 	http.Handle("/Styles/", http.StripPrefix("/Styles/", http.FileServer(http.Dir("./Styles/"))))
@@ -299,20 +287,16 @@ func handleRequest() {
 
 	http.HandleFunc("/", index)
 	http.HandleFunc("/api/groups", getGroupsHandler) // Новый API-эндпоинт
-	
-	http.HandleFunc("/api/lessons_by_group_name", getLessonsByGroupNameHandler)
-	http.HandleFunc("/api/student_by_input_data", getStudentNametudentByInputDataHandler)
-	http.HandleFunc("/api/stuent_data", getStudentHandler)
 
+	http.HandleFunc("/api/lessons_by_group_name", getLessonsByGroupNameHandler)
+	http.HandleFunc("/api/student_by_input_data", getStudentNameByInputDataHandler)
+	http.HandleFunc("/api/student_data", getStudentHandler)
 
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		fmt.Println("Ошибка запуска сервера:", err)
 	}
 }
-
-
-
 
 func main() {
 	db, err := connectDB()
@@ -321,8 +305,6 @@ func main() {
 		return
 	}
 	defer db.Close()
-
-
 
 	handleRequest()
 }
