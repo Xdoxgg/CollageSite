@@ -5,68 +5,124 @@
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>Моя страница</title>
 
-    <link rel="stylesheet" href="/Styles/index.css">
-    <link rel="stylesheet" href="/Styles/main.css">
+    <link rel="stylesheet" href="/Styles/markTable.css">
+    <link rel="stylesheet" href="/Styles/markTable.css">
 
 </head>
 <body>
-    <header class="top-panel">
-        <nav class="nav-menu">
-            <ul >
-                <li><a href="#">Главная</a></li>
-                <li><a href="#">Новости</a></li>
-                <li><a href="#">Абитуриентам<span class="arrow">▼</span></a>
-                <ul class="submenu">
-                    <li><a href="#">Расписание</a></li>
-                
-                    <li><a href="#">Оценки</a></li>
-                </ul></li>
-                <li> <a href="#">Учащимся<span class="arrow">▼</span></a>
-                    <ul class="submenu">
-                        <li><a href="../Pages/timeTable.html">Расписание</a></li>
-                
-                        <li><a href="#">Оценки</a></li>
-                    </ul>
+<table>
+    <caption>table</caption>
+    <thead id="thead">
 
-                </li>
-                <li><a href="#">Контакты</a></li>
-            </ul>
-            
-        </nav>
-        <div class="user-card">
-            <div class="user-card-group" id="userCardGroup"></div>
-            <div class="user-card-name" ><div class="user-card-name-text" id="userCardName"></div></div>
-        </div>
-      <!-- <div class="test">hello world</div> -->
-    </header>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
 
 
-    
-<div class="content">
-   
-</div>
-    
+<script src="../Scripts/mainScripts.js"></script>
+<script src="/Scripts/mainScripts.js"></script>
 <script>
 
-   
+    const months = {
+        1: "Январь",
+        2: "Февраль",
+        3: "Март",
+        4: "Апрель",
+        5: "Май",
+        6: "Июнь",
+        7: "Июль",
+        8: "Август",
+        9: "Сентябрь",
+        10: "Октябрь",
+        11: "Ноябрь",
+        12: "Декабрь"
+    };
 
-    function setUserCardGroup(text) {
-        document.getElementById('userCardGroup').textContent = text;
+
+    document.addEventListener('DOMContentLoaded', loadData);
+
+    async function loadData() {
+        user = await getItemFromLocalStorage('user');
+        try {
+            user = JSON.parse(user)
+
+        } catch (ex) {
+            alert(ex)
+        }
+
+        try {
+
+            const response = await fetch('/api/student_marks?s_name=' + encodeURIComponent(user.uName) + '&s_password=' + encodeURIComponent(user.uDate), {
+                method: 'GET',
+            });
+            if (!response.ok) {
+                throw new Error('Ошибка запроса: ' + response.statusText);
+            }
+
+
+            const data = await response.json();
+            setTable(data)
+
+             return JSON.stringify(data, null, 2);
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Ошибка: ' + error.message);
+        }
     }
 
-    function setUserCardName(text) {
-        document.getElementById('userCardName').textContent = text;
-        
+    function parsePostgresDate(postgresDate) {
+        const date = new Date(postgresDate);
+
+        if (isNaN(date.getTime())) {
+           
+            throw new Error("Неверный формат даты");
+        }
+
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+
+        return month
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    function getMonths(data) {
+        let parsedDates = []
+        data.forEach(el => {
+            parsedDates.push(parsePostgresDate(el.date));
+            
+        });
+        return parsedDates
+    }
+
+    function removeDuplicates(arr) {
+        return [...new Set(arr)];
+    }
+
+    function getDaysInMonth(month, year) {
+        const date = new Date(year, month, 0);
+        return date.getDate();
+    }
+    
+    function addMonthsAndDates(element, dates){
+        alert(JSON.stringify(dates))
         
-        setUserCardGroup('T-294');
-        setUserCardName('Жук Михаил Дмитриевич');
-    });
+        dates.forEach(month =>
+        {
+            let tableElement = document.createElement('th')
+            tableElement.outerText=months[month]
+            element.appendChild(tableElement)
+            
+        });
+    }
+    
+    function setTable(data) {
+        const thead = document.getElementById('thead')
+       
+        addMonthsAndDates(thead, removeDuplicates(getMonths(data)))
+    }
 </script>
-
-
 
 
 </body>

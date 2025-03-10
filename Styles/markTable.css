@@ -1,0 +1,42 @@
+﻿table {
+    
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: #fff;
+    background-color: #333;
+}
+
+body{
+    background: #808080;
+}
+
+caption {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+th, td {
+    border: 1px solid #555;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #444;
+    color: #ffcc00;
+}
+
+tr:nth-child(even) {
+    background-color: #444;
+}
+
+
+
+td:hover {
+    background-color: #555;
+    color: #ffcc00;
+}

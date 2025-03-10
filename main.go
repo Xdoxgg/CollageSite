@@ -35,6 +35,13 @@ type Lesson struct {
 	GroupID      int    `json:"group_id"`
 }
 
+type mark struct {
+	ID       int    `json:"id"`
+	Value    string `json:"value"`
+	Disciple string `json:"disciple"`
+	Date     string `json:"date"`
+}
+
 func connectDB() (*sql.DB, error) {
 	connStr := "host=localhost port=5432 user=postgres password=postgres dbname=postgres sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
@@ -228,6 +235,49 @@ func getStudentByInputData(db *sql.DB, sName string, sPassword string) (bool, er
 	return true, nil
 }
 
+func getStudentMarksHandler(w http.ResponseWriter, r *http.Request) {
+	db, err := connectDB()
+	if err != nil {
+		http.Error(w, "Ошибка подключения к базе данных", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+	sPassword := r.URL.Query().Get("s_password")
+	sName := r.URL.Query().Get("s_name")
+
+	marks, err := getStudentMarks(db, sPassword, sName)
+	if err != nil {
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(marks)
+}
+
+func getStudentMarks(db *sql.DB, sName string, sPassword string) ([]mark, error) {
+	query := `SELECT mark_value, discipline, mark_date FROM mark JOIN mark_to_student ON mark_to_student.mark_id = mark.id JOIN students ON students.id = mark_to_student.student_id
+		WHERE student_date = $1 and student_name = $2
+	`
+
+	rows, err := db.Query(query, sName, sPassword)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var marks []mark
+	for rows.Next() {
+		var mark mark
+		err := rows.Scan(&mark.Value, &mark.Disciple, &mark.Date)
+		if err != nil {
+			return nil, err
+		}
+		marks = append(marks, mark)
+	}
+	return marks, nil
+}
+
 func getStudentHandler(w http.ResponseWriter, r *http.Request) {
 	db, err := connectDB()
 	if err != nil {
@@ -257,7 +307,7 @@ func getStudent(db *sql.DB, sName string, sPassword string) (string, error) {
 	query := `
         SELECT group_name
         FROM students JOIN groups ON (group_id=groups.id)
-        WHERE student_name = $1 AND student_date = $2
+        WHERE student_name = $2 AND student_date = $1
     `
 
 	rows, err := db.Query(query, sName, sPassword)
@@ -291,7 +341,7 @@ func handleRequest() {
 	http.HandleFunc("/api/lessons_by_group_name", getLessonsByGroupNameHandler)
 	http.HandleFunc("/api/student_by_input_data", getStudentNameByInputDataHandler)
 	http.HandleFunc("/api/student_data", getStudentHandler)
-
+	http.HandleFunc("/api/student_marks", getStudentMarksHandler)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		fmt.Println("Ошибка запуска сервера:", err)

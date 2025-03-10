@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Моя страница</title>
 
-    <link rel="stylesheet"  href="/Styles/timeTable.css">
+    <link rel="stylesheet" href="/Styles/timeTable.css">
     <!-- <link rel="stylesheet"  href="../Styles/timeTable.css"> -->
 
 
@@ -14,16 +14,16 @@
 <body>
 <table>
     <caption>
-        <h1>Расписание</h1>
+        <label for="autocomplete-input">Расписание</label>
         <div class="autocomplete-container">
-            <input type="text" id="autocomplete-input" placeholder="Введите текст...">
+            <input type="text" id="autocomplete-input" placeholder="Введите группу или преподавателя">
             <div id="autocomplete-list" class="autocomplete-list"></div>
-          </div>
+        </div>
 
     </caption>
-  
+
     <thead>
-      <tr>
+    <tr>
         <th id="header-lesson">Урок</th>
         <th id="header-monday">Понедельник</th>
         <th id="header-tuesday">Вторник</th>
@@ -31,41 +31,41 @@
         <th id="header-thursday">Четверг</th>
         <th id="header-friday">Пятница</th>
         <th id="header-saturday">Суббота</th>
-      </tr>
+    </tr>
     </thead>
     <tbody>
-      <tr>
-        <th id = "lesson-1">1</th>
+    <tr>
+        <th id="lesson-1">1</th>
 
-      </tr>
-      <tr>
-        <th id = "lesson-2">2</th>
+    </tr>
+    <tr>
+        <th id="lesson-2">2</th>
 
-      </tr>
-      <tr>
-        <th id = "lesson-3">3</th>
-  
-      </tr>
-      <tr>
-        <th id = "lesson-4">4</th>
+    </tr>
+    <tr>
+        <th id="lesson-3">3</th>
 
-      </tr>
-      <tr>
-        <th id = "lesson-5">5</th>
+    </tr>
+    <tr>
+        <th id="lesson-4">4</th>
 
-      </tr>
-      <tr>
-        <th id = "lesson-6">6</th>
+    </tr>
+    <tr>
+        <th id="lesson-5">5</th>
 
-      </tr>
-      <tr>
-        <th id = "lesson-7">7</th>
+    </tr>
+    <tr>
+        <th id="lesson-6">6</th>
 
-      </tr>
-      <tr>
-        <th id = "lesson-8">8</th>
+    </tr>
+    <tr>
+        <th id="lesson-7">7</th>
 
-      </tr>
+    </tr>
+    <tr>
+        <th id="lesson-8">8</th>
+
+    </tr>
     </tbody>
 </table>
 
@@ -74,149 +74,148 @@
 
 <script>
 
-const daysName = ["monday","tuesday","wednesday","thursday","friday","saturday"]
+    const daysName = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
 
-const suggestions = []; // Изначально пустой массив
+    const suggestions = []; // Изначально пустой массив
 
-const input = document.getElementById("autocomplete-input");
-const list = document.getElementById("autocomplete-list");
+    const input = document.getElementById("autocomplete-input");
+    const list = document.getElementById("autocomplete-list");
 
-// Функция для загрузки данных с сервера
-async function loadSuggestions() {
-  try {
-    const response = await fetch("/api/groups"); // Запрос к вашему API
-    const data = await response.json(); // Предполагаем, что сервер возвращает JSON
+    // Функция для загрузки данных с сервера
+    async function loadSuggestions() {
+        try {
+            const response = await fetch("/api/groups"); // Запрос к вашему API
+            const data = await response.json(); // Предполагаем, что сервер возвращает JSON
 
-    suggestions.push(...data.map(group => group.name)); // Добавляем данные в массив suggestions
+            suggestions.push(...data.map(group => group.name)); // Добавляем данные в массив suggestions
 
-  } catch (error) {
-    alert("Ошибка загрузки данных:", error);
-  }
-}
-
-// Вызываем загрузку данных при загрузке страницы
-document.addEventListener("DOMContentLoaded", loadSuggestions);
-
-// Функция для фильтрации и отображения вариантов
-input.addEventListener("input", () => {
-  const query = input.value.toLowerCase();
-  list.innerHTML = ""; // Очищаем список
-
-  if (query) {
-    const filteredSuggestions = suggestions.filter(item => item.toLowerCase().includes(query));
-    filteredSuggestions.forEach(item => {
-      const listItem = document.createElement("div");
-      listItem.textContent = item;
-      listItem.classList.add("autocomplete-item");
-
-      // Добавляем обработчик клика для выбора элемента
-      listItem.addEventListener("click", () => {
-        input.value = item; // Устанавливаем выбранное значение в текстовое поле
-        list.innerHTML = ""; // Очищаем список
-        list.style.display = "none"; // Скрываем список
-       
-        loadData(item)
-      });
-
-      list.appendChild(listItem);
-    });
-
-    list.style.display = "block"; // Показываем список
-  } else {
-    list.style.display = "none"; // Скрываем список, если поле пустое
-  }
-});
-
-// Скрываем список, если пользователь кликает вне его
-document.addEventListener("click", (event) => {
-  if (!event.target.closest(".autocomplete-container")) {
-    list.style.display = "none";
-  }
-});
-
-async function loadData(item){
-
-  event.preventDefault(); // Предотвращаем перезагрузку страницы
-
-  const groupName = item;
-  
-  try {
-    // Отправляем запрос на сервер
-    const response = await fetch('/api/lessons_by_group_name?group_name=' + encodeURIComponent(groupName), {
-      method: 'GET',
-    });
-    if (!response.ok) {
-      throw new Error('Ошибка запроса: ' + response.statusText);
+        } catch (error) {
+            alert("Ошибка загрузки данных:", error);
+        }
     }
 
-    // Получаем данные из ответа
-    const data = await response.json();
-    addTableData(data)
+    // Вызываем загрузку данных при загрузке страницы
+    document.addEventListener("DOMContentLoaded", loadSuggestions);
 
-    // Отображаем результат
-    return JSON.stringify(data, null, 2);
-  } catch (error) {
-    console.error('Ошибка:', error);
-    alert('Ошибка: ' + error.message);
-  }
+    // Функция для фильтрации и отображения вариантов
+    input.addEventListener("input", () => {
+        const query = input.value.toLowerCase();
+        list.innerHTML = ""; // Очищаем список
 
-}
+        if (query) {
+            const filteredSuggestions = suggestions.filter(item => item.toLowerCase().includes(query));
+            filteredSuggestions.forEach(item => {
+                const listItem = document.createElement("div");
+                listItem.textContent = item;
+                listItem.classList.add("autocomplete-item");
+
+                // Добавляем обработчик клика для выбора элемента
+                listItem.addEventListener("click", () => {
+                    input.value = item; // Устанавливаем выбранное значение в текстовое поле
+                    list.innerHTML = ""; // Очищаем список
+                    list.style.display = "none"; // Скрываем список
+
+                    loadData(item)
+                });
+
+                list.appendChild(listItem);
+            });
+
+            list.style.display = "block"; // Показываем список
+        } else {
+            list.style.display = "none"; // Скрываем список, если поле пустое
+        }
+    });
+
+    // Скрываем список, если пользователь кликает вне его
+    document.addEventListener("click", (event) => {
+        if (!event.target.closest(".autocomplete-container")) {
+            list.style.display = "none";
+        }
+    });
+
+    async function loadData(item) {
+
+        event.preventDefault(); // Предотвращаем перезагрузку страницы
+
+        const groupName = item;
+
+        try {
+            // Отправляем запрос на сервер
+            const response = await fetch('/api/lessons_by_group_name?group_name=' + encodeURIComponent(groupName), {
+                method: 'GET',
+            });
+            if (!response.ok) {
+                throw new Error('Ошибка запроса: ' + response.statusText);
+            }
+
+            // Получаем данные из ответа
+            const data = await response.json();
+            addTableData(data)
+
+            // Отображаем результат
+            return JSON.stringify(data, null, 2);
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Ошибка: ' + error.message);
+        }
+
+    }
 
 
-function addTableData(data){
-  
+    function addTableData(data) {
+
 // Получаем все строки таблицы из <tbody>
 
-  const rows = document.querySelectorAll('tbody tr');
-  const cells = document.querySelectorAll('tbody td');
+        const rows = document.querySelectorAll('tbody tr');
+        const cells = document.querySelectorAll('tbody td');
 
 // Удаляем каждый <td>
-cells.forEach(cell => {
-  cell.remove();
-});
+        cells.forEach(cell => {
+            cell.remove();
+        });
 
 // Проходим по каждой строке
-let rowIndex =0;
-rows.forEach(row => {
+        let rowIndex = 0;
+        rows.forEach(row => {
 
-  // Добавляем ячейки для каждого дня недели
-  for (let i =0; i<6; i++){
- 
-    // Создаем новую ячейку <td>
-    const newCell = document.createElement('td');
-    
-    // Устанавливаем текст внутри ячейки (например, пусто или "—")
-    newCell.textContent = getCellData(data,i,rowIndex); // Можно заменить на любое значение
-    
-    // Добавляем ячейку в строку
-    row.appendChild(newCell);
-    
-  }
- 
-  rowIndex++;
-});
-}
+            // Добавляем ячейки для каждого дня недели
+            for (let i = 0; i < 6; i++) {
 
-function getCellData(data, i, lessonNumber){
-  let retElement = null
-  for (let i1 =0; i1<data.length; i1++) {
-    if(data[i1].lesson_number>=7){
+                // Создаем новую ячейку <td>
+                const newCell = document.createElement('td');
+
+                // Устанавливаем текст внутри ячейки (например, пусто или "—")
+                newCell.textContent = getCellData(data, i, rowIndex); // Можно заменить на любое значение
+
+                // Добавляем ячейку в строку
+                row.appendChild(newCell);
+
+            }
+
+            rowIndex++;
+        });
+    }
+
+    function getCellData(data, i, lessonNumber) {
+        let retElement = null
+        for (let i1 = 0; i1 < data.length; i1++) {
+            if (data[i1].lesson_number >= 7) {
+
+            }
+            if (data[i1].lesson_number == (lessonNumber + 1) && data[i1].lesson_day == (i + 1)) {
+                retElement = data[i1];
+                break;
+            }
+        }
+        if (retElement == null) {
+
+            return "—";
+        } else {
+            return retElement.title;
+        }
 
     }
-    if (data[i1].lesson_number == (lessonNumber+1) && data[i1].lesson_day == (i+1)){
-      retElement=data[i1];
-      break;
-    }
-  }
-  if (retElement==null){
-
-    return "—";
-  }
-  else{
-    return retElement.title;
-  }
-
-}
 
 </script>
 
