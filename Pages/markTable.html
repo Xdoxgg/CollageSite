@@ -16,7 +16,7 @@
         <thead id="thead">
 
         </thead>
-        <tbody>
+        <tbody id="tbody">
 
         </tbody>
     </table>
@@ -40,8 +40,8 @@
         11: "Ноябрь",
         12: "Декабрь"
     };
-
-
+    
+    
     document.addEventListener('DOMContentLoaded', loadData);
 
     async function loadData() {
@@ -152,11 +152,37 @@
 
     function setTable(data) {//уёбывание целой таблицы на страницу
         const thead = document.getElementById('thead')
-
+        
         addMonthsAndDates(thead, removeDuplicates(getMonths(data)))
         const scrollContainer = document.getElementById('scrollContainer');
         scrollContainer.scrollLeft = scrollContainer.scrollWidth;
+        const tbody = document.getElementById('tbody')
+        
+        setLessonsAndMarks(data, tbody)
     }
+    
+    function getAllDisciplines(data){
+        let result = []
+        data.forEach(el => {
+            result.push(el.disciple);
+
+        });
+       
+        return removeDuplicates(result)
+    }
+    
+    function setLessonsAndMarks(data, tbody){
+        let disciplines = getAllDisciplines(data)
+        disciplines.forEach(el =>{
+            let row = document.createElement('tr')
+            let td = document.createElement('td')
+            td.textContent = el
+            row.appendChild(td)
+            tbody.appendChild(row)
+        });
+    }
+    
+    
 </script>
 
 

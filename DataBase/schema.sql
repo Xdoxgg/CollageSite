@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS teachers
 CREATE TABLE IF NOT EXISTS lessons
 (
     id            SERIAL PRIMARY KEY,
-    title         VARCHAR(255) NOT NULL,
+    title         VARCHAR(255) NOT NULL, -- проёб по нормализации 3нф
     lesson_number INTEGER,
     lesson_day    INTEGER,
     place         INTEGER,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS mark
     id         SERIAL PRIMARY KEY,
     mark_value INTEGER,
     student_id INTEGER      NOT NULL,
-    discipline VARCHAR(255) NOT NULL,
+    discipline VARCHAR(255) NOT NULL, -- проёб по нормализации 3нф
     mark_date  TIMESTAMP,
     FOREIGN KEY (student_id) REFERENCES students (id)
 );
