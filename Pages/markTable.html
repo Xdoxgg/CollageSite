@@ -10,16 +10,17 @@
 
 </head>
 <body>
-<table>
-    <caption>table</caption>
-    <thead id="thead">
+<div style="overflow-x: auto;" id="scrollContainer">
+    <table>
+        <caption>table</caption>
+        <thead id="thead">
 
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
 
-    </tbody>
-</table>
-
+        </tbody>
+    </table>
+</div>
 
 <script src="../Scripts/mainScripts.js"></script>
 <script src="/Scripts/mainScripts.js"></script>
@@ -44,6 +45,7 @@
     document.addEventListener('DOMContentLoaded', loadData);
 
     async function loadData() {
+
         user = await getItemFromLocalStorage('user');
         try {
             user = JSON.parse(user)
@@ -65,62 +67,95 @@
             const data = await response.json();
             setTable(data)
 
-             return JSON.stringify(data, null, 2);
+            return JSON.stringify(data, null, 2);
         } catch (error) {
             console.error('Ошибка:', error);
             alert('Ошибка: ' + error.message);
         }
     }
 
-    function parsePostgresDate(postgresDate) {
+    function parsePostgresDateMonth(postgresDate) {//берёт год с даты в посгре
         const date = new Date(postgresDate);
 
         if (isNaN(date.getTime())) {
-           
+
             throw new Error("Неверный формат даты");
         }
-
-        const day = date.getDate();
-        const month = date.getMonth() + 1;
-        const year = date.getFullYear();
-
-        return month
+        return date.getMonth() + 1;
     }
 
-    function getMonths(data) {
+    function parsePostgresDateYear(postgresDate) {//берёт год с даты в посгре
+        const date = new Date(postgresDate);
+
+        if (isNaN(date.getTime())) {
+
+            throw new Error("Неверный формат даты");
+        }
+        return date.getFullYear();
+    }
+
+    function getMonths(data) {//возвращает все месяцы из входных дат
         let parsedDates = []
         data.forEach(el => {
-            parsedDates.push(parsePostgresDate(el.date));
-            
+            parsedDates.push(parsePostgresDateMonth(el.date));
+
         });
         return parsedDates
     }
 
-    function removeDuplicates(arr) {
+    function removeDuplicates(arr) {//Select distinct
         return [...new Set(arr)];
     }
 
-    function getDaysInMonth(month, year) {
+    function getDaysInMonth(month, year = 2025) {//возвращает число дней в месяце TODO: СДЕЛАТЬ ТАК ЧТОБЫ БЫЛ НОРМ ГОД А НЕ ТОК 2025
         const date = new Date(year, month, 0);
         return date.getDate();
     }
-    
-    function addMonthsAndDates(element, dates){
-        alert(JSON.stringify(dates))
-        
-        dates.forEach(month =>
-        {
-            let tableElement = document.createElement('th')
-            tableElement.outerText=months[month]
-            element.appendChild(tableElement)
-            
+
+
+    function createDatesRow(months, thead) {//уёбывание дней на страницу
+        let dates = []
+        months.forEach(month => {
+            dates.push(getDaysInMonth(month),)
+
         });
+        let trow = document.createElement('tr')
+        let firstValue = document.createElement('td')
+        firstValue.textContent = 'День'
+        trow.appendChild(firstValue)
+        dates.forEach(date => {
+            for (let i = 1; i <= date; i++) {
+                let td = document.createElement('td')
+                td.textContent = i
+                trow.appendChild(td)
+            }
+
+        });
+        thead.appendChild(trow)
     }
-    
-    function setTable(data) {
+
+    function addMonthsAndDates(element, dates) {//уёбывание месяцев на страницу
+        let tableRow = document.createElement('tr')
+        let firstValue = document.createElement('th')
+        firstValue.textContent = "Месяц"
+        tableRow.appendChild(firstValue)
+        dates.forEach(month => {
+            let tableElement = document.createElement('th')
+            tableElement.textContent = months[month]
+            tableElement.colSpan = getDaysInMonth(month)
+            tableRow.appendChild(tableElement)
+        });
+        element.appendChild(tableRow)
+        createDatesRow(dates, element)
+
+    }
+
+    function setTable(data) {//уёбывание целой таблицы на страницу
         const thead = document.getElementById('thead')
-       
+
         addMonthsAndDates(thead, removeDuplicates(getMonths(data)))
+        const scrollContainer = document.getElementById('scrollContainer');
+        scrollContainer.scrollLeft = scrollContainer.scrollWidth;
     }
 </script>
 

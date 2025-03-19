@@ -297,7 +297,6 @@ func getStudentHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	student, err := getStudent(db, sName, sPassword)
-	// Преобразуем данные в JSON и отправляем клиенту
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(student)
 }
@@ -307,7 +306,7 @@ func getStudent(db *sql.DB, sName string, sPassword string) (string, error) {
 	query := `
         SELECT group_name
         FROM students JOIN groups ON (group_id=groups.id)
-        WHERE student_name = $2 AND student_date = $1
+        WHERE student_name = $1 AND student_date = $2
     `
 
 	rows, err := db.Query(query, sName, sPassword)
