@@ -69,7 +69,7 @@
             // Отправляем запрос на сервер
             fetch('/api/student_by_input_data?s_name=' + encodeURIComponent(name) + '&s_password=' + encodeURIComponent(password), {
                 method: 'GET',
-            })
+            })//adsad
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Ошибка запроса: ' + response.statusText);
