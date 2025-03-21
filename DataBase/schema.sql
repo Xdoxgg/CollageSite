@@ -4,6 +4,16 @@ DROP TABLE IF EXISTS lessons CASCADE;
 DROP TABLE IF EXISTS teachers CASCADE;
 DROP TABLE IF EXISTS groups CASCADE;
 DROP TABLE IF EXISTS mark_to_student CASCADE;
+DROP TABLE IF EXISTS news CASCADE;
+
+CREATE TABLE IF NOT EXISTS news
+(
+    id        SERIAL PRIMARY KEY,
+    data      VARCHAR(500) NOT NULL,
+    img       VARCHAR(100) NOT NULL ,
+    post_date TIMESTAMP    NOT NULL
+);
+
 
 CREATE TABLE IF NOT EXISTS groups
 (
@@ -57,3 +67,5 @@ CREATE TABLE IF NOT EXISTS mark_to_student
     FOREIGN KEY (student_id) REFERENCES students (id),
     FOREIGN KEY (mark_id) REFERENCES mark (id)
 );
+
+

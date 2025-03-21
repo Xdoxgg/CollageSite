@@ -2,7 +2,6 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>Моя страница</title>
 
     <link rel="stylesheet" href="/Styles/index.css">
@@ -21,14 +20,7 @@
                     <li><a href="#">Оценки</a></li>
                 </ul>
             </li>
-<!--            <li><a href="#">Учащимся<span class="arrow">▼</span></a>-->
-<!--                <ul class="submenu">-->
-<!--                    <li><a href="../Pages/timeTable.html">Расписание</a></li>-->
 
-<!--                    <li><a href="#">Оценки</a></li>-->
-<!--                </ul>-->
-
-<!--            </li>-->
             <li><a href="#">Контакты</a></li>
             <li><a href="../Pages/autorisation.html">Аккаунт</a></li>
 
@@ -45,17 +37,50 @@
 </header>
 
 
-<div class="content">
+<table class="content" id="content" style="border: white solid 10px; position: absolute; margin-top: 200px">
 
-</div>
+</table>
 <script src="../Scripts/mainScripts.js"></script>
 <script src="/Scripts/mainScripts.js"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', main);
 
+    async function main() {
+        await setUserCard()
+        await setNews()
+    }
+
+    async function setNews() {
+        try {
+            const response = await fetch('/api/news')
+            if (!response.ok) {
+                throw new Error('Ошибка запроса: ' + response.statusText);
+            }
+
+            const data = await response.json();
+            loadNews(data)
+        } catch (ex) {
+            alert(ex)
+        }
+    }
+
+    function loadNews(news) {
+        let table = document.getElementById('content')
+
+        for (let i = 0; i < news.length; i++) {
+            let row = document.createElement('tr')
+            for (let j = 0; j < 3 && i < news.length; j++, i++) {
+                let col = document.createElement('td')
+                row.appendChild(col)
+            }
+            table.appendChild(row)
+        }
+        alert('finish')
+    }
 
     async function setUserData() {
 
-        user = await getItemFromLocalStorage('user');
+        let user = await getItemFromLocalStorage('user');
         try {
             user = JSON.parse(user)
 
@@ -93,12 +118,12 @@
 
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
+    function setUserCard() {
         if (localStorage.getItem('user') != null) {
             setUserData()
         }
+    }
 
-    });
 </script>
 
 

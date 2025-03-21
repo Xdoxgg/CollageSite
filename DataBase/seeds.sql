@@ -96,3 +96,9 @@ VALUES (6, 1),
        (6, 3),
        (6, 4),
        (6, 5);
+
+
+INSERT INTO news (data, img, post_date)
+VALUES ('test news1', 'null', '2025-03-22'),
+       ('test new2', 'null', '2025-03-21');
+

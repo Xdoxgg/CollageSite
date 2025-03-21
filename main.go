@@ -9,6 +9,13 @@ import (
 	"net/http"
 )
 
+type News struct {
+	ID       int    `json:"id"`
+	Data     string `json:"data"`
+	Img      string `json:"img"`
+	PostDate string `json:"post_date"`
+}
+
 type Group struct {
 	ID        int    `json:"id"`
 	GroupName string `json:"name"`
@@ -330,18 +337,61 @@ func getStudent(db *sql.DB, sName string, sPassword string) (string, error) {
 	return student, nil
 }
 
+func getNewsHandler(w http.ResponseWriter, r *http.Request) {
+	db, err := connectDB()
+	if err != nil {
+		http.Error(w, "Ошибка подключения к базе данных", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+
+	news, err := getNews(db)
+	if err != nil {
+		fmt.Println(err)
+
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(news)
+
+}
+
+func getNews(db *sql.DB) ([]News, error) {
+	query := `
+		SELECT data, img, post_date FROM news
+		ORDER BY post_date DESC 
+`
+	rows, err := db.Query(query)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	defer rows.Close()
+	var newsArray []News
+	for rows.Next() {
+		var news News
+		err := rows.Scan(&news.Data, &news.Img, &news.PostDate)
+		if err != nil {
+			return nil, err
+		}
+		newsArray = append(newsArray, news)
+	}
+	return newsArray, nil
+}
+
 func handleRequest() {
 	http.Handle("/Styles/", http.StripPrefix("/Styles/", http.FileServer(http.Dir("./Styles/"))))
 	http.Handle("/Pages/", http.StripPrefix("/Pages/", http.FileServer(http.Dir("./Pages/"))))
 	http.Handle("/Scripts/", http.StripPrefix("/Scripts/", http.FileServer(http.Dir("./Scripts/"))))
 
 	http.HandleFunc("/", index)
-	http.HandleFunc("/api/groups", getGroupsHandler) // Новый API-эндпоинт
+	http.HandleFunc("/api/groups", getGroupsHandler)
 
 	http.HandleFunc("/api/lessons_by_group_name", getLessonsByGroupNameHandler)
 	http.HandleFunc("/api/student_by_input_data", getStudentNameByInputDataHandler)
 	http.HandleFunc("/api/student_data", getStudentHandler)
 	http.HandleFunc("/api/student_marks", getStudentMarksHandler)
+	http.HandleFunc("/api/news", getNewsHandler)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		fmt.Println("Ошибка запуска сервера:", err)
