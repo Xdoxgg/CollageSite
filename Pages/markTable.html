@@ -151,6 +151,7 @@
     }
 
     function setTable(data) {//уёбывание целой таблицы на страницу
+        alert(JSON.stringify(data))
         const thead = document.getElementById('thead')
         
         addMonthsAndDates(thead, removeDuplicates(getMonths(data)))
@@ -170,19 +171,41 @@
        
         return removeDuplicates(result)
     }
-    
-    function setLessonsAndMarks(data, tbody){
-        let disciplines = getAllDisciplines(data)
-        disciplines.forEach(el =>{
-            let row = document.createElement('tr')
-            let td = document.createElement('td')
-            td.textContent = el
-            row.appendChild(td)
-            tbody.appendChild(row)
+
+    function setLessonsAndMarks(data, tbody) {
+        let disciplines = getAllDisciplines(data); // Получаем уникальные дисциплины
+        let months = removeDuplicates(getMonths(data)); // Получаем уникальные месяцы
+        let monthDays = {}; // Объект для хранения количества дней в каждом месяце
+
+        // Заполняем объект с количеством дней в каждом месяце
+        months.forEach(month => {
+            monthDays[month] = getDaysInMonth(month);
+        });
+
+        disciplines.forEach(discipline => {
+            let row = document.createElement('tr');
+            let td = document.createElement('td');
+            td.textContent = discipline; // Название дисциплины
+            row.appendChild(td);
+
+            // Создаем ячейки для каждого месяца и дня
+            months.forEach(month => {
+                for (let day = 1; day <= monthDays[month]; day++) {
+                    // Находим оценку для данной дисциплины, месяца и дня
+                    let mark = data.find(el => {
+                        const date = new Date(el.date);
+                        return el.disciple === discipline && date.getMonth() + 1 === month && date.getDate() === day;
+                    });
+
+                    let markCell = document.createElement('td');
+                    markCell.textContent = mark ? mark.value : ''; // Если оценка найдена, отображаем ее, иначе оставляем пустой
+                    row.appendChild(markCell);
+                }
+            });
+
+            tbody.appendChild(row); // Добавляем строку в тело таблицы
         });
     }
-    
-    
 </script>
 
 
