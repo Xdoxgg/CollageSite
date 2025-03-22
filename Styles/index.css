@@ -99,3 +99,9 @@
 .nav-menu > ul > li:hover .arrow {
     transform: rotate(0deg);
 }
+
+
+.news {
+    width: 300px;
+    border: 1px solid black;
+}

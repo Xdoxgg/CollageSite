@@ -37,7 +37,7 @@
 </header>
 
 
-<table class="content" id="content" style="border: white solid 10px; position: absolute; margin-top: 200px">
+<table class="content" id="content" style="border: white solid 1px; position: absolute; margin-top: 200px; background: white">
 
 </table>
 <script src="../Scripts/mainScripts.js"></script>
@@ -69,13 +69,16 @@
 
         for (let i = 0; i < news.length; i++) {
             let row = document.createElement('tr')
-            for (let j = 0; j < 3 && i < news.length; j++, i++) {
-                let col = document.createElement('td')
+            for (let j = 0; j < 5 && i < news.length; j++, i++) {
+                let col = document.createElement('td');
+                col.textContent = news[i].data;
+                col.className='news'
+                // col.style.border = '1px solid black'; // Устанавливаем рамку
                 row.appendChild(col)
             }
             table.appendChild(row)
         }
-        alert('finish')
+        // alert('finish')
     }
 
     async function setUserData() {
