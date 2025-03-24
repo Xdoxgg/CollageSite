@@ -88,14 +88,21 @@ VALUES (5, 1, 'Mathematics', '2025-03-10'),
        (9, 1, 'Physics', '2025-03-10'),
        (8, 1, 'Chemistry', '2025-03-10'),
        (8, 1, 'Biology', '2025-03-10'),
-       (2, 1, 'History', '2025-03-10');
+       (2, 1, 'History', '2025-04-10'),
+       (2, 1, 'Biology', '2025-04-10'),
+       (2, 1, 'History', '2025-05-10'),
+       (2, 1, 'Biology', '2025-05-10');
 
 INSERT INTO mark_to_student (student_id, mark_id)
 VALUES (6, 1),
        (6, 2),
        (6, 3),
        (6, 4),
-       (6, 5);
+       (6, 5),
+       (6, 6),
+       (6, 8),
+       (6, 9),
+       (6, 7);
 
 
 INSERT INTO news (data, img, post_date)

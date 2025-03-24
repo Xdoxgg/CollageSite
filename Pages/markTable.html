@@ -5,7 +5,7 @@
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>Моя страница</title>
 
-    <link rel="stylesheet" href="/Styles/markTable.css">
+    <link rel="stylesheet" href="../Styles/markTable.css">
     <link rel="stylesheet" href="/Styles/markTable.css">
 
 </head>
@@ -151,7 +151,6 @@
     }
 
     function setTable(data) {//уёбывание целой таблицы на страницу
-        alert(JSON.stringify(data))
         const thead = document.getElementById('thead')
         
         addMonthsAndDates(thead, removeDuplicates(getMonths(data)))
