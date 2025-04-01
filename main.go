@@ -14,6 +14,7 @@ type News struct {
 	Data     string `json:"data"`
 	Img      string `json:"img"`
 	PostDate string `json:"post_date"`
+	Title    string `json:"title"`
 }
 
 type Group struct {
@@ -358,7 +359,7 @@ func getNewsHandler(w http.ResponseWriter, r *http.Request) {
 
 func getNews(db *sql.DB) ([]News, error) {
 	query := `
-		SELECT data, img, post_date FROM news
+		SELECT title, data, img, post_date FROM news
 		ORDER BY post_date DESC 
 `
 	rows, err := db.Query(query)
@@ -370,7 +371,7 @@ func getNews(db *sql.DB) ([]News, error) {
 	var newsArray []News
 	for rows.Next() {
 		var news News
-		err := rows.Scan(&news.Data, &news.Img, &news.PostDate)
+		err := rows.Scan(&news.Title, &news.Data, &news.Img, &news.PostDate)
 		if err != nil {
 			return nil, err
 		}
@@ -383,6 +384,7 @@ func handleRequest() {
 	http.Handle("/Styles/", http.StripPrefix("/Styles/", http.FileServer(http.Dir("./Styles/"))))
 	http.Handle("/Pages/", http.StripPrefix("/Pages/", http.FileServer(http.Dir("./Pages/"))))
 	http.Handle("/Scripts/", http.StripPrefix("/Scripts/", http.FileServer(http.Dir("./Scripts/"))))
+	http.Handle("/Images/", http.StripPrefix("/Images/", http.FileServer(http.Dir("./Images/"))))
 
 	http.HandleFunc("/", index)
 	http.HandleFunc("/api/groups", getGroupsHandler)

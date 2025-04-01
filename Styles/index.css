@@ -101,7 +101,33 @@
 }
 
 
-.news {
-    width: 300px;
-    border: 1px solid black;
+
+
+/* TODO: fix styles
+
+
+ */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+td {
+    width: 250px;
+    color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+.flex-container {
+    display: flex;
+    align-items: center;
+}
+.flex-container img {
+    width: 50%;
+    height: auto;
+    margin-right: 10px;
+}
+.news img{
+    margin-right: 10px;
+    width: 200px;
+    height: 500px;
 }
