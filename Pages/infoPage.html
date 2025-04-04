@@ -10,20 +10,50 @@
 </head>
 <body>
 <div class="main-panel">
-    <div class="preview-panel" ><div id="pageTitle"></div></div>
-    <div class="content"></div>
-    
+    <div class="preview-panel">
+        <div id="pageTitle"></div>
+    </div>
+    <div class="content" id="content"></div>
+
 </div>
 </body>
 <script>
-    function main(){
+    function main() {
         const urlParams = new URLSearchParams(window.location.search);
-        const pageName = urlParams.get('pageName'); 
-        document.title=pageName    
-        let el = document.getElementById('pageTitle')
-        el.textContent=pageName
+        const pageId = urlParams.get('data_id');
+        getDataById(pageId)
+
     }
-    document.addEventListener('DOMContentLoaded', main);
+
+    async function getDataById(id) {
+
+        try {
+
+            const response = await fetch('/api/info_data?data_id=' + encodeURIComponent(id), {
+                method: 'GET',
+            });
+            if (!response.ok) {
+                throw new Error('Ошибка запроса: ' + response.statusText);
+            }
+
+
+            const data = await response.json();
+            alert(JSON.stringify(data))
+            document.title = data.name
+            let el = document.getElementById('pageTitle')
+            el.textContent = data.name
+            let mainEl = document.getElementById('content')
+            mainEl.innerHTML = data.innerHTML;
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert('Ошибка: ' + error.message);
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        main();
+    });
 
 </script>
 </html>

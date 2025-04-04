@@ -9,6 +9,11 @@ import (
 	"net/http"
 )
 
+type InfoPage struct {
+	Name      string `json:"name"`
+	InnerHTML string `json:"innerHTML"`
+}
+
 type News struct {
 	ID       int    `json:"id"`
 	Data     string `json:"data"`
@@ -383,6 +388,50 @@ func getNews(db *sql.DB) ([]News, error) {
 	return newsArray, nil
 }
 
+func getInfoPageHandler(w http.ResponseWriter, r *http.Request) {
+	db, err := connectDB()
+	if err != nil {
+		http.Error(w, "Ошибка подключения к базе данных", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+	data_id := r.URL.Query().Get("data_id")
+	data, err := getInfoPage(db, data_id)
+	if err != nil {
+		fmt.Println(err)
+
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(data)
+
+}
+
+func getInfoPage(db *sql.DB, id string) (*InfoPage, error) {
+	query := `
+	SELECT name, inner_html FROM info_pages WHERE id = $1
+`
+
+	rows, err := db.Query(query, id)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	var ip *InfoPage
+	fmt.Println("err")
+
+	for rows.Next() {
+		err := rows.Scan(&ip.Name, &ip.InnerHTML)
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+	}
+	fmt.Println(ip)
+	return ip, nil
+
+}
+
 func handleRequest() {
 	http.Handle("/Styles/", http.StripPrefix("/Styles/", http.FileServer(http.Dir("./Styles/"))))
 	http.Handle("/Pages/", http.StripPrefix("/Pages/", http.FileServer(http.Dir("./Pages/"))))
@@ -397,6 +446,7 @@ func handleRequest() {
 	http.HandleFunc("/api/student_data", getStudentHandler)
 	http.HandleFunc("/api/student_marks", getStudentMarksHandler)
 	http.HandleFunc("/api/news", getNewsHandler)
+	http.HandleFunc("/api/info_data", getInfoPageHandler)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		fmt.Println("Ошибка запуска сервера:", err)
