@@ -328,10 +328,9 @@ func getStudent(db *sql.DB, sName string, sPassword string) (string, error) {
 	defer rows.Close()
 
 	var student string
-	
+
 	for rows.Next() {
 		err := rows.Scan(&student)
-		fmt.Println(student)
 
 		if err != nil {
 			fmt.Println(err)

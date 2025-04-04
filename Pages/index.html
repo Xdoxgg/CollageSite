@@ -12,6 +12,7 @@
 <header class="top-panel">
     <nav class="nav-menu">
         <ul>
+            <!-- TODO: add functions   -->
             <li><a href="#">Главная</a></li>
             <li><a href="#">Абитуриентам<span class="arrow">▼</span></a>
                 <ul class="submenu">
@@ -43,7 +44,7 @@
 </header>
 
 <div style="display: flex; justify-content: center; margin-top: 200px;">
-    <table class="content" id="content" style="border: white solid 1px;">
+    <table class="content" id="content">
     </table>
 </div>
 
@@ -83,7 +84,7 @@
                     <table class="sub-table">
                         <tr>
                             <td rowspan="2"> <img src="${'/Images/'+dataArray[index].img+'.png'}" alt="no loaded"></td>
-                            <td><h4>${dataArray[index].title}</h4></td>
+                            <td><h3>${dataArray[index].title}</h3></td>
                         </tr>
                         <tr><td>${dataArray[index].data}</td></tr>
                     </table>`
