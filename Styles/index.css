@@ -48,10 +48,14 @@
 }
 
 
+.nav-menu ul li ul li a{
+    font-size: 25px;
+}
+
 .submenu {
     border-radius: 10px;
     position: absolute;
-    left: 0;
+    left: -10px;
     width: 100%;
     background: #6E473B;
     display: none;

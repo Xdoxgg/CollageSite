@@ -307,7 +307,6 @@ func getStudentHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	student, err := getStudent(db, sName, sPassword)
 
-	fmt.Println(student)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(student)
 }

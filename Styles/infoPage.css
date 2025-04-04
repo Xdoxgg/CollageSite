@@ -1,0 +1,31 @@
+﻿
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-panel{
+    margin-top: 40px;
+    width: 1400px;
+    height: 850px;
+    border-radius: 15px;
+    background: white;
+}
+
+.preview-panel{
+    position: absolute;
+    margin-top: -5px;
+    width: 1400px;
+    height: 80px;
+    background: #6E473B;
+    border-radius: 15px;
+    text-align: center;
+    color: #BEB5A9;
+}
+
+
+.preview-panel div{
+    font-size: 30px;
+    margin-top: 15px;
+}
