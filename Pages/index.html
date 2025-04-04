@@ -20,7 +20,14 @@
                     <li><a href="#">Оценки</a></li>
                 </ul>
             </li>
+            <li><a href="#">Учащимся<span class="arrow">▼</span></a>
+                <ul class="submenu">
+                    <li><a href="../Pages/timeTable.html">Расписание</a></li>
 
+                    <li><a href="#">Оценки</a></li>
+                </ul>
+
+            </li>
             <li><a href="#">Контакты</a></li>
             <li><a href="../Pages/autorisation.html">Аккаунт</a></li>
 
@@ -35,7 +42,6 @@
     </div>
 </header>
 
-
 <div style="display: flex; justify-content: center; margin-top: 200px;">
     <table class="content" id="content" style="border: white solid 1px;">
     </table>
@@ -48,7 +54,7 @@
 
     async function main() {
         await setUserCard()
-        // await setNews()
+        await setNews()
     }
 
     async function setNews() {
@@ -59,49 +65,34 @@
             }
 
             const data = await response.json();
+
             loadNews(data)
         } catch (ex) {
             alert(ex)
         }
     }
 
-    function loadNews(news) {
-        const table = document.getElementById('content');
+    function loadNews(dataArray) {
+        const tableBody = document.getElementById('content');
 
-        for (let i = 0; i < news.length; i++) {
-            let row = document.createElement('tr');
-            let col = document.createElement('td');
-            col.className = 'news';
-            col.style.display = 'flex';
-            col.style.alignItems = 'center';//asdasd
-            col.style.padding = '10px';
-
-            // Создаем контейнер для изображения и текста
-            const img = document.createElement('img');
-            img.src = 'Images/' + news[i].img + '.png'; // Предполагается, что у вас есть поле image в объекте новости
-            img.alt = "Изображение новости";
-            img.className = 'news'; // Применяем класс для стилей
-       
-            // Создаем контейнер для заголовка и описания
-            const textContainer = document.createElement('div');
-
-            // Добавляем заголовок
-            const title = document.createElement('h3');
-            title.textContent = news[i].title; // Предполагается, что у вас есть поле title в объекте новости
-            textContainer.appendChild(title);
-
-            // Добавляем описание
-            const description = document.createElement('p');
-            description.textContent = news[i].data; // Предполагается, что у вас есть поле description в объекте новости
-            textContainer.appendChild(description);
-
-            // Добавляем изображение и текстовый контейнер в ячейку
-            col.appendChild(img);
-            col.appendChild(textContainer);
-            row.appendChild(col);
-            table.appendChild(row);
+        for (let index = 0; index < dataArray.length; index++) {
+            let row = document.createElement('tr')
+            for (let iteration = 0; iteration < 2; iteration++, index++) {
+                let td = document.createElement('td')
+                td.innerHTML=`
+                    <table class="sub-table">
+                        <tr>
+                            <td rowspan="2"> <img src="${'/Images/'+dataArray[index].img+'.png'}" alt="no loaded"></td>
+                            <td><h4>${dataArray[index].title}</h4></td>
+                        </tr>
+                        <tr><td>${dataArray[index].data}</td></tr>
+                    </table>`
+                row.appendChild(td)
+            }
+            tableBody.appendChild(row)
         }
     }
+
     async function setUserData() {
 
         let user = await getItemFromLocalStorage('user');

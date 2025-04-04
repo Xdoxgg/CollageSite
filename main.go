@@ -306,6 +306,8 @@ func getStudentHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	student, err := getStudent(db, sName, sPassword)
+
+	fmt.Println(student)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(student)
 }
@@ -326,8 +328,11 @@ func getStudent(db *sql.DB, sName string, sPassword string) (string, error) {
 	defer rows.Close()
 
 	var student string
+	
 	for rows.Next() {
 		err := rows.Scan(&student)
+		fmt.Println(student)
+
 		if err != nil {
 			fmt.Println(err)
 

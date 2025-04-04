@@ -10,9 +10,9 @@ CREATE TABLE IF NOT EXISTS news
 (
     id        SERIAL PRIMARY KEY,
     title      VARCHAR(100) NOT NULL,
-    data      VARCHAR(500) NOT NULL,
+    data      VARCHAR(1000) NOT NULL,
     img       VARCHAR(100) NOT NULL,
-    post_date TIMESTAMP    NOT NULL
+    post_date TIMESTAMP NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS groups
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS students
     student_date DATE,  -- Убедитесь, что это поле нужно
     group_id     INTEGER NOT NULL,
     student_name VARCHAR(255) NOT NULL,
-    FOREIGN KEY (group_id) REFERENCES groups (id)
+    FOREIGN KEY (group_id) REFERENCES groups (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS teachers
@@ -45,8 +45,8 @@ CREATE TABLE IF NOT EXISTS lessons
     place         INTEGER,
     group_id      INTEGER,
     teacher_id    INTEGER,
-    FOREIGN KEY (group_id) REFERENCES groups (id),
-    FOREIGN KEY (teacher_id) REFERENCES teachers (id)
+    FOREIGN KEY (group_id) REFERENCES groups (id) ON DELETE CASCADE,
+    FOREIGN KEY (teacher_id) REFERENCES teachers (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS mark
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS mark
     student_id INTEGER NOT NULL,
     discipline VARCHAR(255) NOT NULL,
     mark_date  TIMESTAMP,
-    FOREIGN KEY (student_id) REFERENCES students (id)
+    FOREIGN KEY (student_id) REFERENCES students (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS mark_to_student
@@ -64,6 +64,6 @@ CREATE TABLE IF NOT EXISTS mark_to_student
     id         SERIAL PRIMARY KEY,
     student_id INTEGER NOT NULL,
     mark_id    INTEGER NOT NULL,
-    FOREIGN KEY (student_id) REFERENCES students (id),
-    FOREIGN KEY (mark_id) REFERENCES mark (id)
+    FOREIGN KEY (student_id) REFERENCES students (id) ON DELETE CASCADE,
+    FOREIGN KEY (mark_id) REFERENCES mark (id) ON DELETE CASCADE
 );

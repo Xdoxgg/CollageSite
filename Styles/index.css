@@ -1,5 +1,4 @@
 
-
 .top-panel {
     background: #6E473B;
     position: fixed;
@@ -15,15 +14,15 @@
 }
 
 .nav-menu a {
-    color: #BEB5A9; 
-    text-decoration: none; 
+    color: #BEB5A9;
+    text-decoration: none;
     text-decoration-thickness: 3px;
     font-size: 32px;
     display: block;
     padding: 15px;
 }
 
-.nav-menu a:hover{
+.nav-menu a:hover {
     color: #E1D4C2;
 }
 
@@ -34,21 +33,20 @@
 }
 
 
-.nav-menu li{
+.nav-menu li {
     position: relative;
     float: left;
 }
+
 .nav-menu li:hover {
     transition: 2;
-    color: #C0C0C0; 
+    color: #C0C0C0;
 }
 
-.nav-menu li:hover > .submenu{
+.nav-menu li:hover > .submenu {
     display: initial;
 }
 
-
-//h98hg9
 
 .submenu {
     border-radius: 10px;
@@ -57,12 +55,12 @@
     width: 100%;
     background: #6E473B;
     display: none;
-    overflow: hidden; 
+    overflow: hidden;
     z-index: 1000;
 }
 
 
-.submenu li{
+.submenu li {
     float: left;
     width: 100%;
     background: #6E473B;
@@ -70,16 +68,16 @@
 
 
 .submenu a {
-    color: #BEB5A9; 
-    text-decoration: none; 
+    color: #BEB5A9;
+    text-decoration: none;
     text-decoration-thickness: 3px;
     font-size: 38px;
     display: block;
     padding: 0%;
 }
 
-.submenu a:hover{
-    color:white;
+.submenu a:hover {
+    color: white;
 }
 
 .nav-menu li:hover > .submenu {
@@ -101,33 +99,31 @@
 }
 
 
+.content {
+    width: 80%;
 
-
-/* TODO: fix styles
-
-
- */
-table {
-    width: 100%;
-    /*border-collapse: collapse;*/
 }
-td {
-    width: 250px;
-    color: white;
-    padding: 10px;
-    /*border: 1px solid #ccc;*/
+
+
+.sub-table {
+    background: #BEB5A9;
+    border-radius: 15px;
 }
-.flex-container {
-    display: flex;
-    align-items: center;
-}
-.flex-container img {
-    width: 50%;
+
+
+
+.sub-table img {
+    width: 90%;
     height: auto;
-    margin-right: 10px;
+    right: 10px;
 }
-.news img{
-    margin-right: 10px;
-    width: 200px;
-    height: 500px;
+
+.sub-table td:first-child {
+    width: 50%;
 }
+
+.sub-table td:nth-child(2) {
+    text-align: center;
+    border: solid #6E473B 2px;
+}
+
