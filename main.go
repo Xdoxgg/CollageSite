@@ -62,7 +62,6 @@ func connectDB() (*sql.DB, error) {
 		fmt.Println("Ошибка подключения к базе данных:", err)
 		return nil, err
 	}
-	// Проверяем соединение
 	if err = db.Ping(); err != nil {
 		fmt.Println("Не удалось подключиться к базе данных:", err)
 		return nil, err
@@ -87,13 +86,12 @@ func getGroupsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	groups, err := getGroups(db) // Получаем данные групп из базы
+	groups, err := getGroups(db)
 	if err != nil {
 		http.Error(w, "Ошибка получения данных групп", http.StatusInternalServerError)
 		return
 	}
 
-	// Преобразуем данные в JSON и отправляем клиенту
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(groups)
 }
@@ -417,18 +415,17 @@ func getInfoPage(db *sql.DB, id string) (*InfoPage, error) {
 		fmt.Println(err)
 		return nil, err
 	}
-	var ip *InfoPage
-	fmt.Println("err")
+	var ip InfoPage
 
 	for rows.Next() {
 		err := rows.Scan(&ip.Name, &ip.InnerHTML)
+
 		if err != nil {
 			fmt.Println(err)
 			return nil, err
 		}
 	}
-	fmt.Println(ip)
-	return ip, nil
+	return &ip, nil
 
 }
 

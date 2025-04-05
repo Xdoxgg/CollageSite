@@ -45,4 +45,4 @@ VALUES ('Новость о мероприятии колледжа', 'В кол�
 
 
 INSERT INTO info_pages (name, inner_html) 
-values ('Специальности', '<div><a href = "../Pages/infoPage.html?data_id=1">ПОИТ</a></div>');
+values ('Специальности', '<div><ul><li><a href = "../Pages/infoPage.html?data_id=1">ПОИТ</a></li><li><a href = "../Pages/infoPage.html?data_id=1">ПОИТ</a></li><li><a href = "../Pages/infoPage.html?data_id=1">ПОИТ1</a></li><li><a href = "../Pages/infoPage.html?data_id=1">ПОИТ1</a></li></ul></div>');
