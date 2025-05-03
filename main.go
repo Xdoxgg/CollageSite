@@ -48,7 +48,7 @@ type Lesson struct {
 	GroupID      int    `json:"group_id"`
 }
 
-type mark struct {
+type Mark struct {
 	ID       int    `json:"id"`
 	Value    string `json:"value"`
 	Disciple string `json:"disciple"`
@@ -265,7 +265,7 @@ func getStudentMarksHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(marks)
 }
 
-func getStudentMarks(db *sql.DB, sName string, sPassword string) ([]mark, error) {
+func getStudentMarks(db *sql.DB, sName string, sPassword string) ([]Mark, error) {
 	query := `SELECT mark_value, discipline, mark_date FROM mark JOIN mark_to_student ON mark_to_student.mark_id = mark.id JOIN students ON students.id = mark_to_student.student_id
 		WHERE student_date = $1 and student_name = $2
 		ORDER BY mark_date asc
@@ -278,9 +278,9 @@ func getStudentMarks(db *sql.DB, sName string, sPassword string) ([]mark, error)
 	}
 	defer rows.Close()
 
-	var marks []mark
+	var marks []Mark
 	for rows.Next() {
-		var mark mark
+		var mark Mark
 		err := rows.Scan(&mark.Value, &mark.Disciple, &mark.Date)
 		if err != nil {
 			return nil, err
@@ -429,6 +429,148 @@ func getInfoPage(db *sql.DB, id string) (*InfoPage, error) {
 
 }
 
+func getGroupsOnlyHandler(w http.ResponseWriter, r *http.Request) {
+	db, err := connectDB()
+	if err != nil {
+		http.Error(w, "Ошибка подключения к базе данных", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+
+	groups, err := getGroupsOnly(db)
+	if err != nil {
+		http.Error(w, "Ошибка получения данных групп", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(groups)
+}
+
+func getGroupsOnly(db *sql.DB) ([]Group, error) {
+
+	rows, err := db.Query(`
+	SELECT id, group_name
+	FROM groups
+
+
+	`)
+
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var groups []Group
+	for rows.Next() {
+		var group Group
+		err := rows.Scan(&group.ID, &group.GroupName)
+		if err != nil {
+			return nil, err
+		}
+		groups = append(groups, group)
+	}
+
+	return groups, nil
+}
+
+func getStudentsHandler(w http.ResponseWriter, r *http.Request) {
+	db, err := connectDB()
+	if err != nil {
+		http.Error(w, "Ошибка подключения к базе данных", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+
+	sPassword := r.URL.Query().Get("g_name")
+	if sPassword == "" {
+		http.Error(w, "Параметр имя обязателен", http.StatusBadRequest)
+		return
+	}
+
+	student, err := getStudents(db, sPassword)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(student)
+}
+
+func getStudents(db *sql.DB, gName string) ([]Student, error) {
+
+	query := `
+       SELECT students.id, students.student_date, students.group_id, students.student_name
+       FROM students JOIN groups ON students.group_id = groups.id WHERE group_name = $1
+   `
+
+	rows, err := db.Query(query, gName)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+	defer rows.Close()
+	fmt.Println(gName)
+	var students []Student
+	for rows.Next() {
+		var student Student
+		//fmt.Println(student)
+		err := rows.Scan(&student.ID, &student.StudentDate, &student.GroupID, &student.StudentName)
+
+		if err != nil {
+			fmt.Println(err)
+			return nil, err
+		}
+		students = append(students, student)
+	}
+
+	return students, nil
+}
+
+func setMarkHandler(w http.ResponseWriter, r *http.Request) {
+	db, err := connectDB()
+	if err != nil {
+		http.Error(w, "Ошибка подключения к базе данных", http.StatusInternalServerError)
+		return
+	}
+	defer db.Close()
+
+	markValue := r.URL.Query().Get("mark_value")
+	if markValue == "" {
+		http.Error(w, "Параметр имя обязателен", http.StatusBadRequest)
+		return
+	}
+	studentId := r.URL.Query().Get("student_id")
+	if studentId == "" {
+		http.Error(w, "Параметр имя обязателен", http.StatusBadRequest)
+		return
+	}
+	discipline := r.URL.Query().Get("discipline")
+	if discipline == "" {
+		http.Error(w, "Параметр имя обязателен", http.StatusBadRequest)
+		return
+	}
+	fmt.Println(markValue, studentId, discipline)
+	if err := insertMark(db, markValue, studentId, discipline); err != nil {
+		fmt.Println("err3")
+		http.Error(w, "Ошибка при добавлении отметки", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(nil)
+}
+
+func insertMark(db *sql.DB, markValue string, studentID string, discipline string) error {
+	query := `
+		INSERT INTO mark (mark_value, student_id, discipline, mark_date)
+		VALUES ($1, $2, $3, NOW())
+	`
+
+	_, err := db.Exec(query, markValue, studentID, discipline) // Используем Exec для вставки
+	if err != nil {
+		fmt.Println(err) // Выводим ошибку в консоль
+		return err       // Возвращаем ошибку
+	}
+	return nil
+}
 func handleRequest() {
 	http.Handle("/Styles/", http.StripPrefix("/Styles/", http.FileServer(http.Dir("./Styles/"))))
 	http.Handle("/Pages/", http.StripPrefix("/Pages/", http.FileServer(http.Dir("./Pages/"))))
@@ -437,6 +579,7 @@ func handleRequest() {
 
 	http.HandleFunc("/", index)
 	http.HandleFunc("/api/groups", getGroupsHandler)
+	http.HandleFunc("/api/groups_only", getGroupsOnlyHandler)
 
 	http.HandleFunc("/api/lessons_by_group_name", getLessonsByGroupNameHandler)
 	http.HandleFunc("/api/student_by_input_data", getStudentNameByInputDataHandler)
@@ -444,6 +587,9 @@ func handleRequest() {
 	http.HandleFunc("/api/student_marks", getStudentMarksHandler)
 	http.HandleFunc("/api/news", getNewsHandler)
 	http.HandleFunc("/api/info_data", getInfoPageHandler)
+	http.HandleFunc("/api/students", getStudentsHandler)
+	http.HandleFunc("/api/set_mark", setMarkHandler)
+
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		fmt.Println("Ошибка запуска сервера:", err)

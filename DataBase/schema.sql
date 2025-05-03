@@ -9,19 +9,20 @@ DROP TABLE IF EXISTS info_pages;
 
 
 
-CREATE TABLE IF NOT EXISTS info_pages(
-    id SERIAL PRIMARY KEY,
-    name varchar(100) NOT NULL ,
+CREATE TABLE IF NOT EXISTS info_pages
+(
+    id         SERIAL PRIMARY KEY,
+    name       varchar(100)  NOT NULL,
     inner_html varchar(2000) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS news
 (
     id        SERIAL PRIMARY KEY,
-    title      VARCHAR(100) NOT NULL,
+    title     VARCHAR(100)  NOT NULL,
     data      VARCHAR(1000) NOT NULL,
-    img       VARCHAR(100) NOT NULL,
-    post_date TIMESTAMP NOT NULL
+    img       VARCHAR(100)  NOT NULL,
+    post_date TIMESTAMP     NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS groups
@@ -33,8 +34,8 @@ CREATE TABLE IF NOT EXISTS groups
 CREATE TABLE IF NOT EXISTS students
 (
     id           SERIAL PRIMARY KEY,
-    student_date DATE,  
-    group_id     INTEGER NOT NULL,
+    student_date DATE,
+    group_id     INTEGER      NOT NULL,
     student_name VARCHAR(255) NOT NULL,
     FOREIGN KEY (group_id) REFERENCES groups (id) ON DELETE CASCADE
 );
@@ -62,7 +63,7 @@ CREATE TABLE IF NOT EXISTS mark
 (
     id         SERIAL PRIMARY KEY,
     mark_value INTEGER,
-    student_id INTEGER NOT NULL,
+    student_id INTEGER      NOT NULL,
     discipline VARCHAR(255) NOT NULL,
     mark_date  TIMESTAMP,
     FOREIGN KEY (student_id) REFERENCES students (id) ON DELETE CASCADE

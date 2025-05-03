@@ -32,14 +32,20 @@
         }
     });
 
-
+    function goToPage(link) {
+        document.location.href = link;
+    }
     function register() {
 
 
         const name = document.getElementById('user_name').value;
         const password = document.getElementById('user_password').value;
 
-
+        if (name ==='admin' && password==='admin'){
+            goToPage('../Pages/setStudents.html')
+            alert('sucsess')
+            return
+        }
         loadData(name, password)
             .then(res => {
                 if (res) {
@@ -63,6 +69,7 @@
     }
 
     function loadData(name, password) {
+     
         return new Promise((resolve, reject) => {
             event.preventDefault(); // Предотвращаем перезагрузку страницы
 
