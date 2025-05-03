@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS groups
 CREATE TABLE IF NOT EXISTS students
 (
     id           SERIAL PRIMARY KEY,
-    student_date DATE,  -- Убедитесь, что это поле нужно
+    student_date DATE,  
     group_id     INTEGER NOT NULL,
     student_name VARCHAR(255) NOT NULL,
     FOREIGN KEY (group_id) REFERENCES groups (id) ON DELETE CASCADE

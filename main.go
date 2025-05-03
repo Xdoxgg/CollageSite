@@ -99,12 +99,12 @@ func getGroupsHandler(w http.ResponseWriter, r *http.Request) {
 func getGroups(db *sql.DB) ([]Group, error) {
 
 	rows, err := db.Query(`
-	SELECT id, group_name 
+	SELECT id, group_name
 	FROM groups
 	UNION
 	SELECT id, teacher_name
 	FROM teachers
-	
+
 	`)
 
 	if err != nil {
@@ -317,10 +317,10 @@ func getStudentHandler(w http.ResponseWriter, r *http.Request) {
 func getStudent(db *sql.DB, sName string, sPassword string) (string, error) {
 
 	query := `
-        SELECT group_name
-        FROM students JOIN groups ON (group_id=groups.id)
-        WHERE student_name = $1 AND student_date = $2
-    `
+       SELECT group_name
+       FROM students JOIN groups ON (group_id=groups.id)
+       WHERE student_name = $1 AND student_date = $2
+   `
 
 	rows, err := db.Query(query, sName, sPassword)
 	if err != nil {
@@ -366,7 +366,7 @@ func getNewsHandler(w http.ResponseWriter, r *http.Request) {
 func getNews(db *sql.DB) ([]News, error) {
 	query := `
 		SELECT title, data, img, post_date FROM news
-		ORDER BY post_date DESC 
+		ORDER BY post_date DESC
 `
 	rows, err := db.Query(query)
 	if err != nil {
