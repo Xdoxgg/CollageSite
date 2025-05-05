@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	_ "github.com/lib/pq" // анонимный импорт
+	_ "github.com/lib/pq"
 	"html/template"
 	"net/http"
 )
@@ -266,7 +266,7 @@ func getStudentMarksHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getStudentMarks(db *sql.DB, sName string, sPassword string) ([]Mark, error) {
-	query := `SELECT mark_value, discipline, mark_date FROM mark JOIN mark_to_student ON mark_to_student.mark_id = mark.id JOIN students ON students.id = mark_to_student.student_id
+	query := `SELECT mark_value, discipline, mark_date FROM mark JOIN students ON students.id = mark.student_id
 		WHERE student_date = $1 and student_name = $2
 		ORDER BY mark_date asc
 	`

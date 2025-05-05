@@ -1,20 +1,9 @@
 DROP TABLE IF EXISTS mark CASCADE;
-DROP TABLE IF EXISTS mark_to_student CASCADE;
 DROP TABLE IF EXISTS students CASCADE;
 DROP TABLE IF EXISTS lessons CASCADE;
 DROP TABLE IF EXISTS teachers CASCADE;
 DROP TABLE IF EXISTS groups CASCADE;
 DROP TABLE IF EXISTS news CASCADE;
-DROP TABLE IF EXISTS info_pages;
-
-
-
-CREATE TABLE IF NOT EXISTS info_pages
-(
-    id         SERIAL PRIMARY KEY,
-    name       varchar(100)  NOT NULL,
-    inner_html varchar(2000) NOT NULL
-);
 
 CREATE TABLE IF NOT EXISTS news
 (
@@ -69,11 +58,3 @@ CREATE TABLE IF NOT EXISTS mark
     FOREIGN KEY (student_id) REFERENCES students (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS mark_to_student
-(
-    id         SERIAL PRIMARY KEY,
-    student_id INTEGER NOT NULL,
-    mark_id    INTEGER NOT NULL,
-    FOREIGN KEY (student_id) REFERENCES students (id) ON DELETE CASCADE,
-    FOREIGN KEY (mark_id) REFERENCES mark (id) ON DELETE CASCADE
-);

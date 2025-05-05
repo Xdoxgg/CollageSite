@@ -30,11 +30,7 @@ VALUES (5, 1, 'Mathematics', '2025-03-10'),
        (8, 1, 'Biology', '2025-03-10'),
        (2, 1, 'History', '2025-04-10');
 
-INSERT INTO mark_to_student (student_id, mark_id)
-VALUES (1, 1),
-       (1, 2),
-       (1, 3),
-       (1, 4);
+
 
 INSERT INTO news (title, data, img, post_date)
 VALUES ('Новость о мероприятии колледжа',
@@ -45,11 +41,6 @@ VALUES ('Новость о мероприятии колледжа',
         'img2', '2025-03-21');
 
 
-
-INSERT INTO info_pages (name, inner_html)
-values ('Специальности',
-        '<div><ul><li><a href = "../Pages/infoPage.html?data_id=2">ПОИТ</a></li><li><a href = "../Pages/infoPage.html?data_id=3">Логистическая деятельность</a></li><li><a href = "../Pages/infoPage.html?data_id=4">Правоведение</a></li><li><a href = "../Pages/infoPage.html?data_id=1">ПОИТ1</a></li></ul></div>'),
-       ('ПОИТ', '<div>Информация о специальности ПОИТ</div>');
        
        
        

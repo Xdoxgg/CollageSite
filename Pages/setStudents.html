@@ -159,7 +159,6 @@
                     break
                 }
             }
-            alert(JSON.stringify(markData))
             const response = await fetch('/api/set_mark?mark_value=' + encodeURIComponent(markData.mark_value) + '&student_id=' + encodeURIComponent(markData.student_id) + '&discipline=' + encodeURIComponent(markData.discipline), {
                 method: 'POST',
             });
